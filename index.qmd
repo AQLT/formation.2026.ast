@@ -1,28 +1,54 @@
 ---
-title: "{{< var titre.pres >}}"
-date: 11/06/2023
+title: "Analyse des séries temporelles avec R"
+date: 06/18/2026
 date-format: "MMM YYYY"
 ---
 
-Supports de cours et exercices de la formation [Désaisonnaliser une série temporelle au CEPE](https://www.lecepe.fr/formations/methodes-statistiques/series-temporelles/desaisonnaliser-une-serie-temporelle_42.html) les 6, 7, 13, 14 novembre 2023.
+
+Supports de cours et exercices de la formation [Analyse des séries temporelles avec {{< fa brands r-project >}} au CEPE](https://www.lecepe.fr/formations/methodes-statistiques/series-temporelles/analyse-des-series-temporelles-avec-r_44.html) les 18 et 19 juin 2026.
 
 # {{< fa person-chalkboard >}} Cours
 
-1.  [Introduction à la désaisonnalisation](Cours/01_introduction.pdf)
+1. [Rappels sur l’environnement de travail de R](Cours/1_Rappels_R.pdf)
+
+2. [Analyse graphique](Cours/2_Analyse_Graphique.pdf) (voir également compléments sur la [transformation inverse de Box-Cox](backcasttransform.qmd))
+
+3. [Décomposition d'une série temporelle](Cours/3_Decomposition.pdf)
+
+4. [Lissage exponentiel et qualité des prévisions](Cours/4_Lissage_Exponentiel.pdf)
+
+5. [La modélisation ARIMA](Cours/5_ARIMA.pdf)
+
+6. [Compléments](Cours/6_Complements.pdf)
+
 
 # {{< fa computer >}} Travaux pratiques
 
-## TP JDemetra+
+1. [Traitement des séries temporelles sous {{< fa brands r-project >}}](TP/1_Manipulation_series_temporelles.qmd)
 
-1.  [Première manipulation de JDemetra+](TP/JD_1_Premiere_manipulation_JD.qmd)
+2. [Analyse graphique](TP/2_Graphiques.qmd)
+
+3. [Décomposition d'une série temporelle](TP/3_Decomposition.qmd)
+
+4. [Lissage exponentiel](TP/4_Lissage_Exponentiel.qmd)
+
+5. [La modélisation ARIMA](TP/5_ARIMA.qmd)
 
 
-## TP {{< fa brands r-project >}}
 
-0.  [Traitement des séries temporelles sous R](TP/JD_1_Premiere_manipulation_JD.qmd)
+# {{< fa book-atlas >}} Bibliographie 
 
-# {{< fa book-atlas >}} Bibliographie
+Aragon, Y. (2011), *Séries temporelles avec R. Méthodes et cas*, Springer.
+
+Brockwell, P. J. and Davis, R. A. (1991) *Time Series: Theory and Methods*. Second edition. Springer.
+
+Hyndman, R.J., & Athanasopoulos, G. (2018) *Forecasting: principles and practice*, 2nd edition, OTexts: Melbourne, Australia. [OTexts.com/fpp2](https://OTexts.com/fpp2). Accessed on may 2026.
+Slides de cours : <https://github.com/robjhyndman/ETC3550Slides/releases/tag/2018>.
+
+Hyndman, R.J., & Athanasopoulos, G. (2021) *Forecasting: principles and practice*, 3rd edition, OTexts: Melbourne, Australia. [OTexts.com/fpp3](https://OTexts.com/fpp3). Accessed on may 2026.
+Slides et vidéos : <https://github.com/robjhyndman/fpp3_slides>.
 
 # {{< fa copyright >}} Licence
 
-Ces supports de cours sont librement réutilisable sous © 2023 Alain Quartier-la-Tente, Insee [CC BY-NC-SA 3.0 <img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" alt="Licence Creative Commons" style="display: inline-block; margin: 0"/>](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+Ces supports de cours sont librement réutilisable sous © 2026 Alain Quartier-la-Tente, [CC BY-NC-SA 4.0 <img alt="Licence Creative Commons" style="display: inline-block; margin: 0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/>](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+

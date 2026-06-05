@@ -1,0 +1,236 @@
+<!-- --- -->
+<!-- title: "Analyse des séries temporelles avec R" -->
+<!-- format: docx -->
+<!-- output-file: "Analyse des séries temporelles avec R" -->
+<!-- echo: false -->
+<!-- --- -->
+
+```{r}
+#| include: false
+library(forecast, quietly = FALSE, warn.conflicts = FALSE)
+library(ggplot2, quietly = FALSE, warn.conflicts = FALSE)
+library(patchwork, quietly = FALSE, warn.conflicts = FALSE)
+```
+
+
+::: {#exr-def-st}
+Une série temporelle est un processus stochastique, dont on n'observe qu'une réalisation.
+
+**A. Vrai.**
+
+B. Faux.
+:::
+
+::: {#exr-err-dplyr-lag}
+Que va donner le code suivant :
+```{r}
+#| eval: false
+#| echo: true
+library(dplyr)
+library(stats)
+lag(AirPassengers)
+```
+
+**A. Une erreur car le chargement du package `dplyr` masque la fonction `stats::lag`.**
+
+B. Ma série retardée car j'ai chargé le package `stats` après le package `dplyr`.
+:::
+
+::: {#exr-lag-diff}
+Je souhaite calculer la série différenciée à l'ordre 12 et la série retardée de 1 mois de la série `AirPassengers`.
+Quelles fonctions faut-il utiliser ?
+
+A. `stats::diff(AirPassengers, 12)` et `stats::lag(AirPassengers, 1)`.
+
+B. `stats::diff(AirPassengers, -12)` et `stats::lag(AirPassengers, 1)`.
+
+**C. `stats::diff(AirPassengers, 12)` et `stats::lag(AirPassengers, -1)`.**
+
+D. `stats::diff(AirPassengers, -12)` et `stats::lag(AirPassengers, -1)`.
+:::
+
+::: {#exr-tsibble}
+Quel package permet de manipuler des séries temporelles avec le language du `tidyverse` ?
+
+A. `stats`.
+
+B. `xts`.
+
+C. `stats`.
+
+**D. `tsibble`.**
+:::
+
+::: {#exr-autocor}
+À quel autocorrélogramme est associé à la série suivante ?
+
+```{r}
+#| message: false
+#| echo: true
+library(forecast)
+library(ggplot2)
+library(patchwork)
+autoplot(UKgas) + ggplot2::labs(y = "Nombre",
+	title = "Consommation trimestrielle de gaz au Royaume-Uni")
+
+acf_a = ggAcf(AirPassengers, lag.max = 24) + labs(title = "Image A", y = NULL, x = NULL)
+acf_b = ggAcf(ldeaths, lag.max = 24)+ labs(title = "Image B", y = NULL, x = NULL)
+acf_c = ggAcf(UKgas, lag.max = 24)+ labs(title = "Image C", y = NULL, x = NULL) +
+	scale_x_continuous(breaks = c(6, 12, 18, 24))
+acf_d = ggAcf(UKDriverDeaths, lag.max = 24)+ labs(title = "Image D", y = NULL, x = NULL)
+(acf_a + acf_b) /
+	(acf_c + acf_d)
+```
+
+A. Image A.
+
+B. Image B.
+
+**C. Image C.**
+
+D. Image D.
+:::
+
+
+
+::: {#exr-perod-bb}
+À quelle composante est associé le périodogramme suivant :
+```{r}
+set.seed(1)
+s <- ts(cos(2*pi/12*(1:100)) + sin(2*pi/12*(1:100)), frequency = 12, start = 2000)
+spectrum(s, 
+         detrend = FALSE,
+         method = "pgram", log = "no")
+```
+
+A. Tendance.
+
+B. Cycle.
+
+**C. Saisonnalité.**
+
+D. Irrégulier.
+:::
+
+::: {#exr-perod-bb}
+À quelle composante est associé le périodogramme suivant :
+```{r}
+set.seed(1)
+i = ts(rnorm(100), frequency = 12, start = 2000)
+spectrum(i, 
+         detrend = FALSE,
+         method = "pgram", log = "no")
+```
+
+A. Tendance.
+
+B. Cycle.
+
+C. Saisonnalité.
+
+**D. Irrégulier.**
+:::
+
+::: {#exr-bx}
+La transformation de Box-Cox est-elle adaptée à la série suivante ?
+```{r}
+library(forecast)
+forecast::autoplot(expsmooth::cangas, ylab = NULL)
+```
+
+A. Oui.
+
+B. Oui mais seulement avant 1972.
+
+**C. Non.**
+:::
+
+::: {#exr-}
+Est-ce que je peux directement utiliser la fonction `stl()` pour désaisonnaliser cette série ?
+```{r}
+forecast::autoplot(AirPassengers)
+```
+
+**A. Non car le saisonnalité est multiplicative.**
+
+B. Oui car `stl()` détecte la type de saisonnalité.
+:::
+
+::: {#exr-cours-cac-40}
+Quel modèle peut-on utiliser pour prévoir le cours de clôture du CAC 40 ?
+
+```{r}
+y = window(EuStockMarkets[,"CAC"], start = 1998)
+autoplot(y, y = "Niveau",
+         main  = "Cours de clôture du CAC 40")
+```
+
+A. Moyenne des valeurs passées.
+
+**B. Dernière date connue.**
+
+C. Valeur de l'année passée.
+:::
+
+
+::: {#exr-ets-co2}
+Quel modèle est retenu pour cette série ?
+```{r}
+forecast::ets(co2, damped = FALSE)
+```
+A. Tendance multiplicative, Saisonnalité additive, bruit additif
+
+B. Tendance additive, Saisonnalité multiplicative, bruit additif
+
+**C. Tendance additive, Saisonnalité additive, bruit multiplicatif**
+:::
+
+::: {#exr-cours-cac-40-arima}
+Quel modèle ARIMA parait plausible pour modéliser le cours de clôture du CAC 40 ?
+
+```{r}
+y = window(EuStockMarkets[,"CAC"], start = 1998)
+autoplot(y, y = "Niveau",
+         main  = "Cours de clôture du CAC 40")
+```
+
+A. ARIMA(1,0,0).
+
+B. ARIMA(1,0,1).
+
+C. ARIMA(0,0,1).
+
+**D. ARIMA(0,1,0).**
+:::
+
+::: {#exr-cours-tend-diff}
+Si une série comporte une tendance linéaire et une saisonnalité mensuelle, quelle différenciation faut-il faire ?
+
+A. Régulière : $X_t - X_{t-1}$
+
+**B. Saisonnière : $X_t - X_{t-12}$**
+
+C. Saisonnière et régulière.
+:::
+
+::: {#exr-series-journ}
+Sur des séries journalières, quelle méthode privilégier pour prendre en compte la saisonnalité ?
+
+A. Ajouter des indicatrices.
+
+B. Différencier la série.
+
+**C. Ajouter des régresseurs de Fourier.**
+
+D. Toutes ces méthodes.
+
+:::
+
+
+::: {#exr-qual-aic}
+Pour comparer la qualité prédictive d'un modèle exponentiel et d'un modèle ARIMA, je peux utiliser l'AIC.
+
+A. Vrai.
+
+**B. Faux.**
+:::

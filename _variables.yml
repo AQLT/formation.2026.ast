@@ -1,8 +1,8 @@
 auteur: "Alain Quartier-la-Tente"
 titre:
-  pres: "Template formation"
-  website: "FORMATION TEST"
+  pres: "Analyse des séries temporelles avec {{< fa brands r-project >}}"
+  website: "CEPE AST 2026"
 sous-titre: ""
-repo-github: "formation.template"
-description: "Formation test"
+repo-github: "formation.2026.ast"
+description: "Formation Analyse des séries temporelles avec R - 2026"
 

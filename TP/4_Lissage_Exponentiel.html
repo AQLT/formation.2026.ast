@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alain Quartier-la-Tente">
+
+<title>4 - Lissage exponentiel – CEPE AST 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../img/favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-99258d85ffddbd9841977770f8edb96b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X652XRGDPL"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+ 
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied'
+  });
+gtag('config', 'G-X652XRGDPL', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CEPE AST 2026</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Recherche"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Analyse des séries temporelles avec R</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://aqlt.github.io/teaching/"> 
+<span class="menu-text">Ensemble formations</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://github.com/AQLT/formation.2026.ast"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#modèles-exponentiels" id="toc-modèles-exponentiels" class="nav-link active" data-scroll-target="#modèles-exponentiels"><span class="header-section-number">1</span> Modèles exponentiels</a></li>
+  <li><a href="#décomposition-et-modèles-exponentiels" id="toc-décomposition-et-modèles-exponentiels" class="nav-link" data-scroll-target="#décomposition-et-modèles-exponentiels"><span class="header-section-number">2</span> Décomposition et modèles exponentiels</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">4 - Lissage exponentiel</h1>
+<p class="subtitle lead">Analyse des séries temporelles avec <i class="fa-brands fa-r-project" aria-label="r-project"></i></p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Auteur</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alain Quartier-la-Tente </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p>L’objectif de ce TP est d’apprendre à appliquer les modèles ETS</p>
+</blockquote>
+<p>Les packages suivants seront utilisés :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>packages_to_install <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ggplot2"</span>, <span class="st">"patchwork"</span>, <span class="st">"forecast"</span>, <span class="st">"RJDemetra"</span>, <span class="st">"ggdemetra"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> packages_to_install[<span class="sc">!</span> packages_to_install <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(packages) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(packages)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="modèles-exponentiels" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Modèles exponentiels</h1>
+<p>Le but des deux premiers exercices est d’apprendre à manipuler les modèles exponentiels et à analyser la qualité des prévisions.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Etudier les séries <code>co2</code> et <code>UKgas</code> : quel modèle parait le plus adapté ? Faut-il transformer la série ? Comparer les prévisions en utilisant des schémas additifs et multiplicatifs et en transformant ou non la série.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(co2) <span class="sc">+</span> <span class="fu">autoplot</span>(UKgas)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/co1-ukgas-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Les deux séries ont une tendance et une saisonnalité. La saisonnalité parait additive pour <code>co2</code> et multiplicative pour <code>UKGas</code>. Pas de raison de transformer les séries.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ets_co2_add <span class="ot">&lt;-</span> <span class="fu">ets</span>(co2, <span class="at">model =</span> <span class="st">"ZZA"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ets_co2_mult <span class="ot">&lt;-</span> <span class="fu">ets</span>(co2, <span class="at">model =</span> <span class="st">"ZZM"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ets_co2_add</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ETS(M,A,A) 
+
+Call:
+ets(y = co2, model = "ZZA")
+
+  Smoothing parameters:
+    alpha = 0.5995 
+    beta  = 0.0065 
+    gamma = 0.129 
+
+  Initial states:
+    l = 315.2927 
+    b = 0.0772 
+    s = -0.8309 -1.8609 -3.0483 -2.782 -1.2615 0.7793
+           2.1909 2.7066 2.1724 1.2282 0.6624 0.0439
+
+  sigma:  9e-04
+
+     AIC     AICc      BIC 
+1748.989 1750.349 1819.513 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ets_co2_mult</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ETS(M,Ad,M) 
+
+Call:
+ets(y = co2, model = "ZZM")
+
+  Smoothing parameters:
+    alpha = 0.6824 
+    beta  = 0.0415 
+    gamma = 3e-04 
+    phi   = 0.9773 
+
+  Initial states:
+    l = 315.3348 
+    b = 0.1077 
+    s = 0.9972 0.9939 0.9904 0.9909 0.9963 1.0024
+           1.0069 1.0088 1.0074 1.004 1.0018 0.9999
+
+  sigma:  8e-04
+
+     AIC     AICc      BIC 
+1721.105 1722.628 1795.777 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(co2, <span class="at">start =</span> <span class="dv">1993</span>), <span class="at">y =</span> <span class="st">"Millions de thermies"</span>) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_co2_add, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,A,A)"</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_co2_mult, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,Ad,M)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/co2-ets-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Les prévisions très proches sur le court terme mais s’éloignent sur le long terme. Cela vient notamment la tendance est amortie dans le modèle multiplicatif. ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ets_gas_add <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZA"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ets_gas_mult <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZM"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ets_gas_add_log <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZA"</span>, <span class="at">lambda =</span> <span class="dv">0</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ets_gas_add_log_unb <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZA"</span>, <span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">biasadj =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(UKgas, <span class="at">start =</span> <span class="dv">1970</span>), <span class="at">y =</span> <span class="st">"co2"</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add, <span class="at">h =</span> <span class="dv">24</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A)"</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_mult, <span class="at">h =</span> <span class="dv">24</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,A,M)"</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log, <span class="at">h =</span> <span class="dv">24</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas)"</span>) </span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/ukgas-ets-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Ici la différence entre multiplicatif et additif est plus nette : Dans les deux modèles on prévoit une hausse de la tendance mais les amplitudes croissent de manière exponentielle dans le modèle multiplicatif alors qu’elles restent constantes dans le cas additif (ce qui est logique). Passer au log ne semble pas avoir beaucoup d’impact.</p>
+<p>Sur le plus long terme les résultats sont en revanche différents. Passer au log conduit à des estimations plus importantes (notamment lorsque l’on corrige du bais. Rappels : sans correction du biais cela revient à avoir une estimation de la médiane plutôt que moyen, ce qui n’est pas forcément incohérent). C’est logique car lorsque l’on passe au log cela revient à supposer que la tendance est également multiplicative. ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(UKgas, <span class="at">start =</span> <span class="dv">1985</span>), <span class="at">y =</span> <span class="st">"co2"</span>)  <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_mult, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,A,M)"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas)"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log_unb, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas) corrigé biais"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/ukgas-transform-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<p>::: Appliquer le modèle <span class="math inline">\(ETS(A,A,A)\)</span> sur la série en logarithme et utiliser le modèle <span class="math inline">\(ETS(M,M,M)\)</span> donnent des résultats similaires. ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(UKgas, <span class="at">start =</span> <span class="dv">1985</span>), <span class="at">y =</span> <span class="st">"co2"</span>)  <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas)"</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(<span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"MMM"</span>), <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,M,M)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/ukgas-log-multi-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<p>::: :::</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sur les modèles précédents, comparer les qualités des modèles :</p>
+<ol type="1">
+<li><p>En termes d’AIC.</p></li>
+<li><p>En termes de BIC.</p></li>
+<li><p>En termes de qualité de prévision dans l’échantillon (MAE).</p></li>
+<li><p>En termes de qualité de prévision hors échantillon (MAE). On pourra s’aider de la fonction <code>forecast::tsCV()</code>.</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Les AIC et les BIC peuvent être extraits avec les fonctions <code>AIC()</code> et <code>BIC()</code>. L’AICc peut être extrait à partir du modèle estimé, par exemple <code>ets_co2_add$aicc</code>.</p>
+<p>Pour simplifier les fonctions, nous construisons une liste pour rassembler tous les modèles : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>modeles_co2 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,A)"</span> <span class="ot">=</span> ets_co2_add,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,Ad,M)"</span> <span class="ot">=</span> ets_co2_mult</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>modeles_gas <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(A,A,A)"</span> <span class="ot">=</span> ets_gas_add,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,M)"</span> <span class="ot">=</span> ets_gas_mult,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(A,A,A) sur log(UKgas)"</span> <span class="ot">=</span> ets_gas_add_log</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Ce sont toujours les mêmes modèles qui minimisent l’AIC, l’AICc, le BIC et les erreurs de prévision dans l’échantillon : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_co2, AIC)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ETS(M,A,A) ETS(M,Ad,M) 
+   1748.989    1721.105 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_co2, <span class="st">`</span><span class="at">[[</span><span class="st">`</span>, <span class="st">"aicc"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ETS(M,A,A) ETS(M,Ad,M) 
+   1750.349    1722.628 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_co2, BIC)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ETS(M,A,A) ETS(M,Ad,M) 
+   1819.513    1795.777 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_co2, <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">resid</span>(x))))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ETS(M,A,A)  ETS(M,Ad,M) 
+0.0006932697 0.0006665409 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_gas, AIC)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
+               1310.37144                1254.72156                  29.18537 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_gas, <span class="st">`</span><span class="at">[[</span><span class="st">`</span>, <span class="st">"aicc"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
+               1312.20817                1256.55829                  31.02211 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_gas, BIC)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
+               1334.51062                1278.86074                  53.32455 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_gas, <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">resid</span>(x))))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
+              26.26259517                0.06945649                0.06602586 </code></pre>
+</div>
+<p>::: Les statistiques sur les résidus peuvent aussi être calculés avec la fonction <code>forecast::accuracy()</code> :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>accuracy_co2 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(modeles_co2, accuracy))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(accuracy_co2) <span class="ot">&lt;-</span> <span class="fu">names</span>(modeles_co2)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>accuracy_gas <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(modeles_gas, accuracy))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(accuracy_gas) <span class="ot">&lt;-</span> <span class="fu">names</span>(modeles_gas)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>accuracy_co2</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    ME      RMSE       MAE         MPE       MAPE      MASE
+ETS(M,A,A)  0.01617189 0.2890652 0.2334053 0.004603584 0.06932078 0.1843375
+ETS(M,Ad,M) 0.04391736 0.2795208 0.2242251 0.012834152 0.06663769 0.1770872
+                   ACF1
+ETS(M,A,A)   0.06310175
+ETS(M,Ad,M) -0.01244155</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>accuracy_gas</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                ME     RMSE      MAE         MPE      MAPE
+ETS(A,A,A)                3.561575 38.17327 26.26260 -0.36141773 10.168961
+ETS(M,A,M)                4.706001 32.16226 21.63151  0.32062812  6.581003
+ETS(A,A,A) sur log(UKgas) 2.735393 31.94691 21.40806  0.06739374  6.475240
+                               MASE        ACF1
+ETS(A,A,A)                0.9328563 -0.06195286
+ETS(M,A,M)                0.7683585 -0.09735967
+ETS(A,A,A) sur log(UKgas) 0.7604214 -0.08546581</code></pre>
+</div>
+</div>
+<p>Pour la prévision hors échantillon, nous allons construire une fonction par modèle prenant comme paramètre la série brute et l’horizon de prévision et qui renvoie la série prévue : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>f_co2 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,A)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"MAA"</span>), <span class="at">h =</span> h)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>},</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,Ad,M)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"MAM"</span>, <span class="at">damped =</span> <span class="cn">TRUE</span>), <span class="at">h =</span> h)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>f_gas <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(A,A,A)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"AAA"</span>), <span class="at">h =</span> h)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>},</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,M)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"MAM"</span>), <span class="at">h =</span> h)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>},</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(A,A,A) sur log(UKgas)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"AAA"</span>, <span class="at">lambda =</span> <span class="dv">0</span>), <span class="at">h =</span> h)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemple : </span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>f_co2[[<span class="dv">1</span>]](co2, <span class="dv">1</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
+</div>
+<p>::: Pour estimer les modèles hors échantillon, nous allons utiliser au moins 10 ans de données pour la base <code>co2</code> (sur 39 années) et pour la base <code>UKgas</code> (sur 27 ans). C’est toujours les mêmes modèles qui minimisent ces erreurs : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>e_co2 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(f_co2, tsCV, <span class="at">y =</span> co2, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">12</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>e_gas <span class="ot">&lt;-</span> <span class="fu">lapply</span>(f_gas, tsCV, <span class="at">y =</span> UKgas, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">4</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(e_co2, <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(x), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ETS(M,A,A) ETS(M,Ad,M) 
+  0.2429932   0.2338688 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(e_gas, <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(x), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
+                 35.90959                  34.17049                  33.38889 </code></pre>
+</div>
+<p>:::</p>
+<p>:::</p>
+</section>
+<section id="décomposition-et-modèles-exponentiels" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Décomposition et modèles exponentiels</h1>
+<p>Le but du prochain exercice est de voir comment coupler une méthode de décomposition (STL ou X-13ARIMA) avec une méthode de prévision (ici ETS mais cela peut être généralisé). Pour faire cet exercice il faut donc avoir vu le cours sur la <a href="../Cours/3_Decomposition.pdf">décomposition d’une série temporelle</a> et le <a href="../TP/3_Decomposition.html">TP associé</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>L’objectif de cette exercice est d’étudier la série <code>AirPassengers</code> en utilisant plusieurs méthodes :</p>
+<ol type="1">
+<li><p>Enlever les 12 derniers mois de <code>AirPassengers</code>.</p></li>
+<li><p>Désaisonnaliser la série en utilisant <code>stl(., s.window = "periodic")</code> (après transformation de la série) et <code>RJDemetra::x13(., spec = RJDemetra::x13_spec(easter.enabled = FALSE, transform.function = "Log"))</code>.</p></li>
+<li><p>Appliquer un modèle ETS sur la série désaisonnalisée.</p></li>
+<li><p>Prévoir la série désaisonnalisée sur 12 mois puis la série brute réintroduisant :</p></li>
+</ol>
+<ol type="a">
+<li>la saisonnalité sur la dernière année pour la méthode STL (peut se faire en une étape avec la fonction <code>forecast::stlf()</code>) ;</li>
+<li>les prévisions de la saisonnalité pour la méthode X-13-ARIMA.</li>
+</ol>
+<ol start="5" type="1">
+<li><p>Comparer les prévisions des précédentes méthodes avec un ETS directement calculé sur la série désaisonnalisée (avec ou sans transformation de Box-Cox).</p></li>
+<li><p>Qu’en est-il de la prévision en temps-réel (en utilisant la fonction <code>tsCV()</code>) ?</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Mise en garde</span>Indice
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Pour récupérer la composante saisonnière avec X-13 on pourra utiliser le code suivant : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RJDemetra)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">window</span>(ipi_c_eu[,<span class="st">"FR"</span>], <span class="at">start =</span> <span class="dv">2010</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>x13_spec <span class="ot">&lt;-</span> <span class="fu">x13_spec</span>(<span class="at">easter.enabled =</span> <span class="cn">FALSE</span>, <span class="at">transform.function =</span> <span class="st">"Log"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>mod_x13 <span class="ot">&lt;-</span> <span class="fu">x13</span>(y, x13_spec)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>ggdemetra<span class="sc">::</span><span class="fu">seasonal</span>(mod_x13)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2010 0.9479753 0.9734184 1.1314166 1.0194466 0.9149364 1.1040334 1.0253971
+2011 0.9486036 0.9738929 1.1146702 0.9990949 0.9435734 1.0943653 0.9971672
+2012 0.9744944 0.9952811 1.0894809 0.9994940 0.9609052 1.0773442 1.0308806
+2013 0.9881143 0.9734166 1.0586928 1.0414531 0.9661151 1.0343284 1.0633799
+2014 0.9887445 0.9708317 1.0618924 1.0340629 0.9456969 1.0716857 1.0449424
+2015 0.9611904 0.9664643 1.0947446 1.0268935 0.9248260 1.1112972 1.0452371
+2016 0.9336952 0.9939049 1.1148269 1.0091687 0.9628352 1.0902251 0.9872514
+2017 0.9643035 0.9598990 1.1181909 0.9641950 1.0015167 1.0999538 0.9910340
+2018 0.9940038 0.9589041 1.0890126 0.9941445 0.9936340 1.0782580 1.0244067
+2019 0.9762525 0.9595422 1.0576157 1.0265143 1.0011358 1.0398603 1.0629867
+2020 0.9768492 0.9563783 1.0931460 1.0048644 0.9500369 1.1224476 1.0549500
+           Aug       Sep       Oct       Nov       Dec
+2010 0.7473449 1.0778667 1.0402228 1.0450781 0.9908451
+2011 0.7725295 1.0855555 1.0436457 1.0336021 0.9645023
+2012 0.7668908 1.0190248 1.1114204 1.0328655 0.9392665
+2013 0.7511679 1.0558980 1.0943162 1.0101039 0.9672872
+2014 0.7347217 1.0923548 1.0977123 0.9715733 0.9995163
+2015 0.7410440 1.0774877 1.0685360 1.0097237 0.9855990
+2016 0.7929649 1.0745879 1.0421123 1.0381299 0.9631477
+2017 0.7846862 1.0498446 1.0744776 1.0308174 0.9322877
+2018 0.7891563 1.0084274 1.1117543 1.0382887 0.9294119
+2019 0.7697163 1.0458578 1.0967583 1.0142887 0.9512178
+2020 0.7506828 1.0740572 1.0727587 1.0092022 0.9628865</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ggdemetra<span class="sc">::</span><span class="fu">seasonaladj</span>(mod_x13)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2010  95.25565  95.64233  96.78133  98.48481 104.37885 101.26505  98.30338
+2011 104.36394 104.32359 103.43866 101.69204 116.68408  99.14422 101.28692
+2012 101.89900 100.37365 101.24088  99.85052 100.00987 100.71062 100.69062
+2013  97.45836  98.31350  98.13990  99.28435  99.57405 101.99855  98.92984
+2014  97.90194 100.01734  98.78591  99.51039  97.70572  97.78987  98.85712
+2015  98.41963  99.43461  99.01853  99.71823  98.39689 100.60315  96.72447
+2016 101.85337 100.21080  97.14512 102.36148 102.40590 101.17176  97.03709
+2017 102.56108 101.15647 102.39754 101.63919 102.54447 101.27698 100.40019
+2018 102.41410 102.82571 103.67189 103.60666  99.33235 104.61318 104.06023
+2019 106.32495 106.30070 105.52037 104.43109 105.08065 101.93677 103.29386
+2020 103.39364 104.66569  83.97780  66.37711  77.57594  87.48738  92.32665
+           Aug       Sep       Oct       Nov       Dec
+2010  99.68623 101.12568 100.93991  98.27017 102.84151
+2011 101.35535 101.33060 101.95031 102.84422 103.88777
+2012 102.75257 100.97889  96.81305  98.65757  97.41645
+2013  97.71450  97.83142  99.87972  98.00971  97.79929
+2014  97.31577  98.13661  98.11314  98.29418  98.44762
+2015 102.69296 101.25406 100.79212 100.81966 101.35969
+2016 100.50886 100.41059  99.22155 100.85443 103.51476
+2017 103.73573 103.06287 105.35353 107.68154 106.72671
+2018 104.66875 103.82503 104.33960 105.55831 105.01264
+2019 102.37538 104.22067 106.22213 102.53491 102.81557
+2020  95.51304  97.48084  99.46319 100.67358 100.32336</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>ggdemetra<span class="sc">::</span><span class="fu">seasonal</span>(mod_x13, <span class="at">forecast =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2021 0.9240691 0.9625840 1.1283879 1.0116767 0.9542506 1.1122949 1.0301236
+           Aug       Sep       Oct       Nov       Dec
+2021 0.7736290 1.0661433 1.0421204 1.0454394 0.9628614</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>Si l’on veut une version plus rapide du code on peut également utiliser cette option : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(y, x13_spec)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>saisonnalite <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"sa"</span>, <span class="st">"s_f"</span>, <span class="st">"y_f"</span>))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>saisonnalite[[<span class="st">"s"</span>]]</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2010 0.9479753 0.9734184 1.1314166 1.0194466 0.9149364 1.1040334 1.0253971
+2011 0.9486036 0.9738929 1.1146702 0.9990949 0.9435734 1.0943653 0.9971672
+2012 0.9744944 0.9952811 1.0894809 0.9994940 0.9609052 1.0773442 1.0308806
+2013 0.9881143 0.9734166 1.0586928 1.0414531 0.9661151 1.0343284 1.0633799
+2014 0.9887445 0.9708317 1.0618924 1.0340629 0.9456969 1.0716857 1.0449424
+2015 0.9611904 0.9664643 1.0947446 1.0268935 0.9248260 1.1112972 1.0452371
+2016 0.9336952 0.9939049 1.1148269 1.0091687 0.9628352 1.0902251 0.9872514
+2017 0.9643035 0.9598990 1.1181909 0.9641950 1.0015167 1.0999538 0.9910340
+2018 0.9940038 0.9589041 1.0890126 0.9941445 0.9936340 1.0782580 1.0244067
+2019 0.9762525 0.9595422 1.0576157 1.0265143 1.0011358 1.0398603 1.0629867
+2020 0.9768492 0.9563783 1.0931460 1.0048644 0.9500369 1.1224476 1.0549500
+           Aug       Sep       Oct       Nov       Dec
+2010 0.7473449 1.0778667 1.0402228 1.0450781 0.9908451
+2011 0.7725295 1.0855555 1.0436457 1.0336021 0.9645023
+2012 0.7668908 1.0190248 1.1114204 1.0328655 0.9392665
+2013 0.7511679 1.0558980 1.0943162 1.0101039 0.9672872
+2014 0.7347217 1.0923548 1.0977123 0.9715733 0.9995163
+2015 0.7410440 1.0774877 1.0685360 1.0097237 0.9855990
+2016 0.7929649 1.0745879 1.0421123 1.0381299 0.9631477
+2017 0.7846862 1.0498446 1.0744776 1.0308174 0.9322877
+2018 0.7891563 1.0084274 1.1117543 1.0382887 0.9294119
+2019 0.7697163 1.0458578 1.0967583 1.0142887 0.9512178
+2020 0.7506828 1.0740572 1.0727587 1.0092022 0.9628865</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>saisonnalite[[<span class="st">"sa"</span>]]</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2010  95.25565  95.64233  96.78133  98.48481 104.37885 101.26505  98.30338
+2011 104.36394 104.32359 103.43866 101.69204 116.68408  99.14422 101.28692
+2012 101.89900 100.37365 101.24088  99.85052 100.00987 100.71062 100.69062
+2013  97.45836  98.31350  98.13990  99.28435  99.57405 101.99855  98.92984
+2014  97.90194 100.01734  98.78591  99.51039  97.70572  97.78987  98.85712
+2015  98.41963  99.43461  99.01853  99.71823  98.39689 100.60315  96.72447
+2016 101.85337 100.21080  97.14512 102.36148 102.40590 101.17176  97.03709
+2017 102.56108 101.15647 102.39754 101.63919 102.54447 101.27698 100.40019
+2018 102.41410 102.82571 103.67189 103.60666  99.33235 104.61318 104.06023
+2019 106.32495 106.30070 105.52037 104.43109 105.08065 101.93677 103.29386
+2020 103.39364 104.66569  83.97780  66.37711  77.57594  87.48738  92.32665
+           Aug       Sep       Oct       Nov       Dec
+2010  99.68623 101.12568 100.93991  98.27017 102.84151
+2011 101.35535 101.33060 101.95031 102.84422 103.88777
+2012 102.75257 100.97889  96.81305  98.65757  97.41645
+2013  97.71450  97.83142  99.87972  98.00971  97.79929
+2014  97.31577  98.13661  98.11314  98.29418  98.44762
+2015 102.69296 101.25406 100.79212 100.81966 101.35969
+2016 100.50886 100.41059  99.22155 100.85443 103.51476
+2017 103.73573 103.06287 105.35353 107.68154 106.72671
+2018 104.66875 103.82503 104.33960 105.55831 105.01264
+2019 102.37538 104.22067 106.22213 102.53491 102.81557
+2020  95.51304  97.48084  99.46319 100.67358 100.32336</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>saisonnalite[[<span class="st">"s_f"</span>]]</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2021 0.9240691 0.9625840 1.1283879 1.0116767 0.9542506 1.1122949 1.0301236
+           Aug       Sep       Oct       Nov       Dec
+2021 0.7736290 1.0661433 1.0421204 1.0454394 0.9628614</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On a d'ailleurs directement une prévision de la série brute qui est faite par modèle ARIMA</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>saisonnalite[[<span class="st">"y_f"</span>]]</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Jan       Feb       Mar       Apr       May       Jun       Jul
+2021  93.80530  98.83526 116.70635 105.64151  99.21541 117.25615 107.92506
+           Aug       Sep       Oct       Nov       Dec
+2021  81.39014 112.06948 110.18417 110.21518 101.77148</code></pre>
+</div>
+<p>::: Pour la fonction <code>tsCV()</code> on pourra utiliser la fonction suivante pour X-13 : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>fx13_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h){</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(x, x13_spec)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"sa"</span>, <span class="st">"s_f"</span>))</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    ets_x13 <span class="ot">&lt;-</span> <span class="fu">ets</span>(mod_jx13<span class="sc">$</span>sa, <span class="at">model =</span> <span class="st">"AAN"</span>) <span class="co"># modèle fixé pour gagner du temps</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    ets_x13_f <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_x13, <span class="at">h =</span> h)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    ets_x13_f<span class="sc">$</span>mean <span class="ot">&lt;-</span> ets_x13_f<span class="sc">$</span>mean <span class="sc">*</span> mod_jx13<span class="sc">$</span>s_f[<span class="dv">1</span><span class="sc">:</span>h] <span class="co"># on ajoute 1:h pour éviter quelques bugs</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    ets_x13_f<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"X-13 + ETS"</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pas la peine d'actualiser autres paramètres</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    ets_x13_f</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>::: :::</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RJDemetra)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">window</span>(AirPassengers, <span class="at">end =</span> <span class="fu">end</span>(AirPassengers) <span class="sc">-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(y)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/AirPassengers-seas-stl-x13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saisonnalité présente qui dépend de la tendance : passage au log nécessaire pour STL</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mod_stl <span class="ot">&lt;-</span> <span class="fu">stl</span>(<span class="fu">log</span>(y), <span class="at">s.window =</span> <span class="st">"periodic"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>x13_spec <span class="ot">&lt;-</span> <span class="fu">x13_spec</span>(<span class="at">easter.enabled =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(y, x13_spec)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"sa"</span>, <span class="st">"s_f"</span>, <span class="st">"y_f"</span>))</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">exp</span>(<span class="fu">seasadj</span>(mod_stl))) <span class="sc">+</span> </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(mod_jx13<span class="sc">$</span>sa)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/AirPassengers-seas-stl-x13-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>ets_x13 <span class="ot">&lt;-</span> <span class="fu">ets</span>(mod_jx13<span class="sc">$</span>sa)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>ets_stl <span class="ot">&lt;-</span> <span class="fu">ets</span>(<span class="fu">seasadj</span>(mod_stl))</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>ets_x13_f <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_x13, <span class="at">h =</span> <span class="dv">12</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>ets_stl_f <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_stl, <span class="at">h =</span> <span class="dv">12</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>x13_f <span class="ot">&lt;-</span> ets_x13_f<span class="sc">$</span>mean <span class="sc">*</span> mod_jx13<span class="sc">$</span>s_f <span class="co"># Il faut multiplier car schéma multiplicatif</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>ets_f <span class="ot">&lt;-</span> ets_stl_f<span class="sc">$</span>mean <span class="sc">+</span> <span class="fu">lag</span>(<span class="fu">seasonal</span>(mod_stl), <span class="sc">-</span><span class="dv">12</span>)</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>ets_f <span class="ot">&lt;-</span> <span class="fu">exp</span>(ets_f)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>On aurait directement pu obtenir les résultats avec fonction <code>forecast::stlf()</code> : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ets_f <span class="sc">-</span> <span class="fu">stlf</span>(y, <span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">h =</span> <span class="dv">12</span>, <span class="at">s.window =</span> <span class="st">"periodic"</span>)<span class="sc">$</span>mean</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+1960   0   0   0   0   0   0   0   0   0   0   0   0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>est_direct <span class="ot">&lt;-</span> <span class="fu">ets</span>(y)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>est_direct_bc <span class="ot">&lt;-</span> <span class="fu">ets</span>(y, <span class="at">lambda =</span> <span class="dv">0</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(AirPassengers, <span class="at">start =</span> <span class="fu">end</span>(AirPassengers) <span class="sc">-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)),</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"AirPassengers"</span>) <span class="sc">+</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(x13_f, <span class="at">series =</span> <span class="st">"X-13 + ETS"</span>) <span class="sc">+</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(mod_jx13<span class="sc">$</span>y_f, <span class="at">series =</span> <span class="st">"X-13"</span>)<span class="sc">+</span> </span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(ets_f, <span class="at">series =</span> <span class="st">"STL + ETS"</span>)<span class="sc">+</span> </span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(est_direct, <span class="at">PI=</span><span class="cn">FALSE</span>, <span class="at">h =</span><span class="dv">12</span>), <span class="at">series =</span> <span class="st">"ETS(M,Ad,M)"</span>)<span class="sc">+</span> </span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(est_direct_bc, <span class="at">PI=</span><span class="cn">FALSE</span>, <span class="at">h =</span><span class="dv">12</span>), <span class="at">series =</span> <span class="st">"ETS(A,N,A) sur log(AirPassengers)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/AirPassengers-comp-prev-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Les séries qui semblent avoir les meilleurs prévisions sont X-13 (modèle ARIMA, voir TP 5) et X-13 + ETS. Le moins bon semble l’ETS directement calculé. ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fx13_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">h =</span> <span class="dv">12</span>){</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(x, x13_spec)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"sa"</span>, <span class="st">"s_f"</span>))</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    ets_x13 <span class="ot">&lt;-</span> <span class="fu">ets</span>(mod_jx13<span class="sc">$</span>sa, <span class="at">model =</span> <span class="st">"AAN"</span>) <span class="co"># modèle fixé pour gagner du temps</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    ets_x13_f <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ets_x13, <span class="at">h =</span> h)</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>    ets_x13_f<span class="sc">$</span>mean <span class="ot">&lt;-</span> ets_x13_f<span class="sc">$</span>mean <span class="sc">*</span> mod_jx13<span class="sc">$</span>s_f[<span class="dv">1</span><span class="sc">:</span>h] <span class="co"># on ajoute 1:h pour éviter quelques bugs</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    ets_x13_f<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="st">"X-13 + ETS"</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pas la peine d'actualiser autres paramètres</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ets_x13_f$upper = ets_x13_f$upper * mod_jx13$s_f</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ets_x13_f$lower = ets_x13_f$lower * mod_jx13$s_f</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    ets_x13_f</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>fx13 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">h =</span> <span class="dv">12</span>){</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(x, x13_spec)</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    x13_f <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"y_f"</span>))<span class="sc">$</span>y_f</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Ici il y a des calculs en trop car la prévision est uniquement faite avec le pré-ajustement, on pourrait encore optimiser en ne faisant que le pré-ajustement</span></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mod_jx13 &lt;- jregarima(y, x13_spec$regarima)</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x13_f &lt;- get_indicators(mod_jx13, c("model.y_f"))[[1]]</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>    x13_f <span class="ot">&lt;-</span> <span class="fu">window</span>(x13_f, <span class="at">end =</span> <span class="fu">time</span>(x13_f)[h])</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">method =</span> <span class="st">"X-13ARIMA"</span>, </span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>                          <span class="at">model =</span> mod_jx13, </span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>                          <span class="at">mean =</span> x13_f,</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>                          <span class="at">level =</span> <span class="cn">NULL</span>, </span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>                          <span class="at">lower =</span> <span class="cn">NULL</span>, <span class="at">upper =</span> <span class="cn">NULL</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">series =</span> <span class="cn">NULL</span>, </span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fitted =</span> <span class="cn">NULL</span>, <span class="at">residuals =</span><span class="cn">NULL</span>), <span class="at">class =</span> <span class="st">"forecast"</span>))</span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>fstl_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">h =</span> <span class="dv">12</span>){</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stlf</span>(x, <span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">h =</span> h, <span class="at">s.window =</span> <span class="st">"periodic"</span>, <span class="at">etsmodel =</span> <span class="st">"AAN"</span>)</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>fets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h){</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"MAM"</span>, <span class="at">damped =</span> <span class="cn">TRUE</span>), <span class="at">h =</span> h)</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>fets_bc <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h){</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">model =</span> <span class="st">"AAA"</span>), <span class="at">h =</span> h)</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a><span class="co"># On enlève les 3 premières années pour X-13</span></span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>e_x13_ets <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(AirPassengers, fx13_ets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">3</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a>e_x13 <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(AirPassengers, fx13, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">3</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a>e_stl_est <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(AirPassengers, fstl_ets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">3</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a>e_ets <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(AirPassengers, fets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">3</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>e_ets_bc <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(AirPassengers, fets_bc, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">3</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>erreur <span class="ot">&lt;-</span> <span class="fu">ts.union</span>(e_x13_ets, e_x13, e_stl_est,</span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>                  e_ets, e_ets_bc)</span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(erreur) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"X-13+ETS"</span>, <span class="st">"X-13"</span>, <span class="st">"STL+ETS"</span>, <span class="st">"ETS"</span>, <span class="st">"log(ETS)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>::: Le modèle ARIMA (issu de X-13) semble de meilleure qualité : ::: {.cell}</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(erreur<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>X-13+ETS     X-13  STL+ETS      ETS log(ETS) 
+146.4192 140.2659 202.0902 206.2573 210.5955 </code></pre>
+</div>
+<p>::: :::</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>L’objectif de cette exercice est d’étudier la série <code>AQLTrainings::ipi_c_eu_nsa[, "FR"]</code> d’indice de production industrielle en France :</p>
+<ol type="1">
+<li><p>La série présentent-elle des ruptures et si oui à quelles dates ?</p></li>
+<li><p>Appliquer un modèle ETS sur l’ensemble de la série et sur la série tronquée après rupture. Comparer les résultats.</p></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>La saisonnalité est forte et peut masquer certaines ruptures mais on observe clairement un choc en niveau fin 2008 et différents chocs en 2020.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> AQLTrainings<span class="sc">::</span>ipi_c_eu_nsa[, <span class="st">"FR"</span>]</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(y)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="4_Lissage_Exponentiel_files/figure-html/ipi-autoplot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>On estime un modèle après 2021 et un modèle sur l’ensemble de la période. Le premier modèle utilise peu de données (possiblement plus de révisions sur l’estimation des paramètres) mais est adapté aux dernières données.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>ets_ens <span class="ot">&lt;-</span> <span class="fu">ets</span>(y)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>ets_ens</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ETS(A,N,A) 
+
+Call:
+ets(y = y)
+
+  Smoothing parameters:
+    alpha = 0.3377 
+    gamma = 1e-04 
+
+  Initial states:
+    l = 112.5149 
+    s = -2.4618 2.5962 9.2066 7.0061 -26.0919 1.2617
+           9.3701 -3.6234 -0.5118 9.0008 -2.9397 -2.8129
+
+  sigma:  4.5566
+
+     AIC     AICc      BIC 
+2753.839 2755.461 2809.984 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>ets_post_covid <span class="ot">&lt;-</span> <span class="fu">ets</span>(<span class="fu">window</span>(y, <span class="at">start =</span> <span class="dv">2021</span>))</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>ets_post_covid</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ETS(M,N,A) 
+
+Call:
+ets(y = window(y, start = 2021))
+
+  Smoothing parameters:
+    alpha = 0.0544 
+    gamma = 1e-04 
+
+  Initial states:
+    l = 101.1958 
+    s = -1.8395 2.9041 7.7339 5.4373 -23.1807 0.4865
+           8.5988 -3.4905 -0.3528 9.2798 -2.8656 -2.7113
+
+  sigma:  0.0314
+
+     AIC     AICc      BIC 
+398.3562 409.2653 429.7714 </code></pre>
+</div>
+</div>
+<p>Comparons maintenant les résultats des deux modèles sur</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>fets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h, model_ets){</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">forecast</span>(<span class="fu">ets</span>(</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    x, </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">paste</span>(model_ets<span class="sc">$</span>components[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">collapse =</span> <span class="st">""</span>), </span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">damped =</span> <span class="fu">as.logical</span>(model_ets<span class="sc">$</span>components[<span class="dv">4</span>])</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  ), <span class="at">h =</span> h)</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>e_ens <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(y, fets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span><span class="sc">*</span><span class="dv">12</span>, <span class="at">model_ets =</span> ets_ens)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle identifié post-COVID mais estimé sur l'ensemble de la période</span></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>e_post_covid_ens <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(y, fets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span><span class="sc">*</span><span class="dv">12</span>, <span class="at">model_ets =</span> ets_post_covid)</span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle identifié post-COVID et estimé post-COVID</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>e_post_covid <span class="ot">&lt;-</span> <span class="fu">tsCV</span>(<span class="fu">window</span>(y,<span class="at">start =</span> <span class="dv">2021</span>), fets, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">2</span><span class="sc">*</span><span class="dv">12</span>, <span class="at">model_ets =</span> ets_post_covid)</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>erreur <span class="ot">&lt;-</span> <span class="fu">ts.union</span>(e_ens, e_post_covid_ens)</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>erreur_post_covid <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(<span class="fu">ts.union</span>(e_ens, e_post_covid))</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(erreur) <span class="ot">&lt;-</span> </span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(erreur_post_covid) <span class="ot">&lt;-</span> </span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Ensemble données"</span>, <span class="st">"Post COVID"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Le modèle identifié sur l’ensemble de la période minimise les erreurs de prévision : pour le modèle estimé après la période du COVID (tronquage des données), il y a trop peu de données pour avoir une estimation stable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(erreur<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ensemble données       Post COVID 
+        25.22225         25.79278 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(erreur_post_covid<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ensemble données       Post COVID 
+        11.55818         15.38205 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copié");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copié");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/aqlt\.github\.io\/formation\.2026\.ast");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="light">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "AQLT/formations";
+    script.dataset.repoId = "R_kgDOIepagw";
+    script.dataset.category = "Announcements";
+    script.dataset.categoryId = "DIC_kwDOIepag84CSt5_";
+    script.dataset.mapping = "pathname";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "bottom";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "fr";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, Alain Quartier-la-Tente</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="http://github.com/AQLT">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://aqlt.github.io/">
+      <i class="bi bi-globe" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/alainqlt/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

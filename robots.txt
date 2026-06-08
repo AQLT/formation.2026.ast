@@ -1,1 +1,3 @@
-Sitemap: https://github.com/AQLT/formation.template/sitemap.xml
+User-agent: *
+
+Sitemap: https://aqlt.github.io/formation.2026.ast/sitemap.xml

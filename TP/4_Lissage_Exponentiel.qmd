@@ -13,11 +13,11 @@ knitr::opts_chunk$set(echo = TRUE, collapse = FALSE, warning = FALSE,
 Les packages suivants seront utilisés :
 
 ```{r,warning=FALSE, message=FALSE, eval=TRUE}
-packages_to_install <- c("ggplot2", "patchwork", "forecast", "RJDemetra", "ggdemetra")
+packages_to_install <- c("ggplot2", "patchwork", "forecast", "RJDemetra", "ggdemetra", "AQLTrainings")
 
 packages <- packages_to_install[! packages_to_install %in% installed.packages()[,"Package"]]
 if (length(packages) > 0) {
-	install.packages(packages)
+	install.packages(packages, repos = c('https://aqlt.r-universe.dev', 'https://cloud.r-project.org'))
 }
 library(forecast)
 library(ggplot2)

@@ -21,11 +21,12 @@ Les packages suivants seront utilisés :
 
 ```{r,warning=FALSE, message=FALSE, eval=FALSE}
 packages_to_install <- c("ggplot2", "forecast", "RJDemetra", "patchwork", "lmtest",
-						 "tsibble", "fable", "feasts", "dplyr", "lubridate")
+						 "tsibble", "fable", "feasts", "dplyr", "lubridate",
+						 "AQLTrainings")
 
 packages <- packages_to_install[! packages_to_install %in% installed.packages()[,"Package"]]
 if (length(packages) > 0) {
-	install.packages(packages)
+	install.packages(packages, repos = c('https://aqlt.r-universe.dev', 'https://cloud.r-project.org'))
 }
 ```
 
@@ -37,7 +38,7 @@ Le but des prochains exercices est d'étudier les séries classiques
 
 -   `AirPassengers` nombre mensuel de passagers aériens ;
 
--   `nottem` température mensuelle moyenne au chateau de Nottingham.
+-   `nottem` température mensuelle moyenne au château de Nottingham.
 
 # Niveau du Lac de Huron
 

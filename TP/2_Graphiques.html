@@ -335,7 +335,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><code>gas</code> représente la production mensuelle de gaz en Australie entre janvier 1956 et août 1995</p>
+<p><code>gas</code> représente la production mensuelle de gaz en Australie entre janvier 1956 et août 1995.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(gas, <span class="at">main =</span> <span class="st">"Production mensuelle de gaz en Australie"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -345,8 +345,6 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-</div>
-<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Point atypique net pour la série gold à l'observation 770</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(gold)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -405,7 +403,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Le nombre d’arrivées augmentent avec le temps, sauf ceux en provenance du Japon après 1995. Les séries semblent saisonnières avec une saisonnalité qui dépend du niveau (sauf pour US) et on observe un changement de saisonnalité pour les arrivées en provenance du Japon</p>
+<p>Le nombre d’arrivées augmentent avec le temps, sauf ceux en provenance du Japon après 1995. Les séries semblent saisonnières avec une saisonnalité qui dépend du niveau (sauf pour US) et on observe un changement de saisonnalité pour les arrivées en provenance du Japon.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> <span class="fu">gg_season</span>(Arrivals)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -978,7 +976,7 @@ autoplot(usdeaths) + autoplot(BoxCox(usdeaths, 0))</code></pre>
 </div>
 </div>
 </div>
-<p>On observe une tendance exponentielle : il peut être utile de faire une transformation</p>
+<p>On observe une tendance exponentielle : il peut être utile de faire une transformation.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">

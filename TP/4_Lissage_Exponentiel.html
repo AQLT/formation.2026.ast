@@ -207,6 +207,7 @@ window.Quarto = {
   <ul>
   <li><a href="#modèles-exponentiels" id="toc-modèles-exponentiels" class="nav-link active" data-scroll-target="#modèles-exponentiels"><span class="header-section-number">1</span> Modèles exponentiels</a></li>
   <li><a href="#décomposition-et-modèles-exponentiels" id="toc-décomposition-et-modèles-exponentiels" class="nav-link" data-scroll-target="#décomposition-et-modèles-exponentiels"><span class="header-section-number">2</span> Décomposition et modèles exponentiels</a></li>
+  <li><a href="#étude-de-série-économique-lindice-de-production-industrielle" id="toc-étude-de-série-économique-lindice-de-production-industrielle" class="nav-link" data-scroll-target="#étude-de-série-économique-lindice-de-production-industrielle"><span class="header-section-number">3</span> Étude de série économique : l’indice de production industrielle</a></li>
   </ul>
 </nav>
     </div>
@@ -354,7 +355,8 @@ ets(y = co2, model = "ZZM")
 </div>
 </div>
 </div>
-<p>Les prévisions très proches sur le court terme mais s’éloignent sur le long terme. Cela vient notamment la tendance est amortie dans le modèle multiplicatif. ::: {.cell}</p>
+<p>Les prévisions très proches sur le court terme mais s’éloignent sur le long terme. Cela vient notamment la tendance est amortie dans le modèle multiplicatif.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ets_gas_add <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZA"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ets_gas_mult <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZM"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ets_gas_add_log <span class="ot">&lt;-</span> <span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"ZZA"</span>, <span class="at">lambda =</span> <span class="dv">0</span>)</span>
@@ -372,10 +374,9 @@ ets(y = co2, model = "ZZM")
 </div>
 </div>
 </div>
-</div>
-</div>
 <p>Ici la différence entre multiplicatif et additif est plus nette : Dans les deux modèles on prévoit une hausse de la tendance mais les amplitudes croissent de manière exponentielle dans le modèle multiplicatif alors qu’elles restent constantes dans le cas additif (ce qui est logique). Passer au log ne semble pas avoir beaucoup d’impact.</p>
-<p>Sur le plus long terme les résultats sont en revanche différents. Passer au log conduit à des estimations plus importantes (notamment lorsque l’on corrige du bais. Rappels : sans correction du biais cela revient à avoir une estimation de la médiane plutôt que moyen, ce qui n’est pas forcément incohérent). C’est logique car lorsque l’on passe au log cela revient à supposer que la tendance est également multiplicative. ::: {.cell}</p>
+<p>Sur le plus long terme les résultats sont en revanche différents. Passer au log conduit à des estimations plus importantes (notamment lorsque l’on corrige du bais. Rappels : sans correction du biais cela revient à avoir une estimation de la médiane plutôt que moyen, ce qui n’est pas forcément incohérent). C’est logique car lorsque l’on passe au log cela revient à supposer que la tendance est également multiplicative.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(UKgas, <span class="at">start =</span> <span class="dv">1985</span>), <span class="at">y =</span> <span class="st">"co2"</span>)  <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_mult, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,A,M)"</span>) <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas)"</span>) <span class="sc">+</span></span>
@@ -387,7 +388,9 @@ ets(y = co2, model = "ZZM")
 </figure>
 </div>
 </div>
-<p>::: Appliquer le modèle <span class="math inline">\(ETS(A,A,A)\)</span> sur la série en logarithme et utiliser le modèle <span class="math inline">\(ETS(M,M,M)\)</span> donnent des résultats similaires. ::: {.cell}</p>
+</div>
+<p>Appliquer le modèle <span class="math inline">\(ETS(A,A,A)\)</span> sur la série en logarithme et utiliser le modèle <span class="math inline">\(ETS(M,M,M)\)</span> donnent des résultats similaires.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(UKgas, <span class="at">start =</span> <span class="dv">1985</span>), <span class="at">y =</span> <span class="st">"co2"</span>)  <span class="sc">+</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(ets_gas_add_log, <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(A,A,A) sur log(UKgas)"</span>) <span class="sc">+</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(<span class="fu">ets</span>(UKgas, <span class="at">model =</span> <span class="st">"MMM"</span>), <span class="at">h =</span> <span class="dv">60</span>, <span class="at">PI =</span> <span class="cn">FALSE</span>), <span class="st">"ETS(M,M,M)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
@@ -398,7 +401,10 @@ ets(y = co2, model = "ZZM")
 </figure>
 </div>
 </div>
-<p>::: :::</p>
+</div>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -431,7 +437,8 @@ ets(y = co2, model = "ZZM")
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Les AIC et les BIC peuvent être extraits avec les fonctions <code>AIC()</code> et <code>BIC()</code>. L’AICc peut être extrait à partir du modèle estimé, par exemple <code>ets_co2_add$aicc</code>.</p>
-<p>Pour simplifier les fonctions, nous construisons une liste pour rassembler tous les modèles : ::: {.cell}</p>
+<p>Pour simplifier les fonctions, nous construisons une liste pour rassembler tous les modèles :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>modeles_co2 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,A)"</span> <span class="ot">=</span> ets_co2_add,</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,Ad,M)"</span> <span class="ot">=</span> ets_co2_mult</span>
@@ -442,9 +449,8 @@ ets(y = co2, model = "ZZM")
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(A,A,A) sur log(UKgas)"</span> <span class="ot">=</span> ets_gas_add_log</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-</div>
-<p>Ce sont toujours les mêmes modèles qui minimisent l’AIC, l’AICc, le BIC et les erreurs de prévision dans l’échantillon : ::: {.cell}</p>
+<p>Ce sont toujours les mêmes modèles qui minimisent l’AIC, l’AICc, le BIC et les erreurs de prévision dans l’échantillon :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(modeles_co2, AIC)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> ETS(M,A,A) ETS(M,Ad,M) 
@@ -485,7 +491,8 @@ ets(y = co2, model = "ZZM")
 <pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
               26.26259517                0.06945649                0.06602586 </code></pre>
 </div>
-<p>::: Les statistiques sur les résidus peuvent aussi être calculés avec la fonction <code>forecast::accuracy()</code> :</p>
+</div>
+<p>Les statistiques sur les résidus peuvent aussi être calculés avec la fonction <code>forecast::accuracy()</code> :</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>accuracy_co2 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(modeles_co2, accuracy))</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(accuracy_co2) <span class="ot">&lt;-</span> <span class="fu">names</span>(modeles_co2)</span>
@@ -512,7 +519,8 @@ ETS(M,A,M)                0.7683585 -0.09735967
 ETS(A,A,A) sur log(UKgas) 0.7604214 -0.08546581</code></pre>
 </div>
 </div>
-<p>Pour la prévision hors échantillon, nous allons construire une fonction par modèle prenant comme paramètre la série brute et l’horizon de prévision et qui renvoie la série prévue : ::: {.cell}</p>
+<p>Pour la prévision hors échantillon, nous allons construire une fonction par modèle prenant comme paramètre la série brute et l’horizon de prévision et qui renvoie la série prévue :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>f_co2 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETS(M,A,A)"</span> <span class="ot">=</span> <span class="cf">function</span>(x, h) {</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"MAA"</span>), <span class="at">h =</span> h)</span>
@@ -532,13 +540,15 @@ ETS(A,A,A) sur log(UKgas) 0.7604214 -0.08546581</code></pre>
 <span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast</span>(<span class="fu">ets</span>(x, <span class="at">model =</span> <span class="st">"AAA"</span>, <span class="at">lambda =</span> <span class="dv">0</span>), <span class="at">h =</span> h)</span>
 <span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemple : </span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemple :</span></span>
 <span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>f_co2[[<span class="dv">1</span>]](co2, <span class="dv">1</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
 Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 </div>
-<p>::: Pour estimer les modèles hors échantillon, nous allons utiliser au moins 10 ans de données pour la base <code>co2</code> (sur 39 années) et pour la base <code>UKgas</code> (sur 27 ans). C’est toujours les mêmes modèles qui minimisent ces erreurs : ::: {.cell}</p>
+</div>
+<p>Pour estimer les modèles hors échantillon, nous allons utiliser au moins 10 ans de données pour la base <code>co2</code> (sur 39 années) et pour la base <code>UKgas</code> (sur 27 ans). C’est toujours les mêmes modèles qui minimisent ces erreurs :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>e_co2 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(f_co2, tsCV, <span class="at">y =</span> co2, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">12</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>e_gas <span class="ot">&lt;-</span> <span class="fu">lapply</span>(f_gas, tsCV, <span class="at">y =</span> UKgas, <span class="at">h =</span> <span class="dv">1</span>, <span class="at">initial =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">4</span>)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(e_co2, <span class="cf">function</span>(x) <span class="fu">mean</span>(<span class="fu">abs</span>(x), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
@@ -551,8 +561,10 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <pre><code>               ETS(A,A,A)                ETS(M,A,M) ETS(A,A,A) sur log(UKgas) 
                  35.90959                  34.17049                  33.38889 </code></pre>
 </div>
-<p>:::</p>
-<p>:::</p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="décomposition-et-modèles-exponentiels" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Décomposition et modèles exponentiels</h1>
@@ -596,7 +608,8 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Pour récupérer la composante saisonnière avec X-13 on pourra utiliser le code suivant : ::: {.cell}</p>
+<p>Pour récupérer la composante saisonnière avec X-13 on pourra utiliser le code suivant :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RJDemetra)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">window</span>(ipi_c_eu[,<span class="st">"FR"</span>], <span class="at">start =</span> <span class="dv">2010</span>)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>x13_spec <span class="ot">&lt;-</span> <span class="fu">x13_spec</span>(<span class="at">easter.enabled =</span> <span class="cn">FALSE</span>, <span class="at">transform.function =</span> <span class="st">"Log"</span>)</span>
@@ -663,9 +676,8 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 2021 0.7736290 1.0661433 1.0421204 1.0454394 0.9628614</code></pre>
 </div>
 </div>
-</div>
-</div>
-<p>Si l’on veut une version plus rapide du code on peut également utiliser cette option : ::: {.cell}</p>
+<p>Si l’on veut une version plus rapide du code on peut également utiliser cette option :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(y, x13_spec)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>saisonnalite <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"sa"</span>, <span class="st">"s_f"</span>, <span class="st">"y_f"</span>))</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>saisonnalite[[<span class="st">"s"</span>]]</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
@@ -737,7 +749,9 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
            Aug       Sep       Oct       Nov       Dec
 2021  81.39014 112.06948 110.18417 110.21518 101.77148</code></pre>
 </div>
-<p>::: Pour la fonction <code>tsCV()</code> on pourra utiliser la fonction suivante pour X-13 : ::: {.cell}</p>
+</div>
+<p>Pour la fonction <code>tsCV()</code> on pourra utiliser la fonction suivante pour X-13 :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>fx13_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h){</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(x, x13_spec)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"sa"</span>, <span class="st">"s_f"</span>))</span>
@@ -748,7 +762,10 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pas la peine d'actualiser autres paramètres</span></span>
 <span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    ets_x13_f</span>
 <span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<p>::: :::</p>
+</div>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -778,7 +795,7 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>x13_spec <span class="ot">&lt;-</span> <span class="fu">x13_spec</span>(<span class="at">easter.enabled =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(y, x13_spec)</span>
 <span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"s"</span>, <span class="st">"sa"</span>, <span class="st">"s_f"</span>, <span class="st">"y_f"</span>))</span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">exp</span>(<span class="fu">seasadj</span>(mod_stl))) <span class="sc">+</span> </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">exp</span>(<span class="fu">seasadj</span>(mod_stl))) <span class="sc">+</span></span>
 <span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(mod_jx13<span class="sc">$</span>sa)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -795,7 +812,8 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>ets_f <span class="ot">&lt;-</span> ets_stl_f<span class="sc">$</span>mean <span class="sc">+</span> <span class="fu">lag</span>(<span class="fu">seasonal</span>(mod_stl), <span class="sc">-</span><span class="dv">12</span>)</span>
 <span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>ets_f <span class="ot">&lt;-</span> <span class="fu">exp</span>(ets_f)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>On aurait directement pu obtenir les résultats avec fonction <code>forecast::stlf()</code> : ::: {.cell}</p>
+<p>On aurait directement pu obtenir les résultats avec fonction <code>forecast::stlf()</code> :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ets_f <span class="sc">-</span> <span class="fu">stlf</span>(y, <span class="at">lambda =</span> <span class="dv">0</span>, <span class="at">h =</span> <span class="dv">12</span>, <span class="at">s.window =</span> <span class="st">"periodic"</span>)<span class="sc">$</span>mean</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
@@ -806,9 +824,9 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">window</span>(AirPassengers, <span class="at">start =</span> <span class="fu">end</span>(AirPassengers) <span class="sc">-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)),</span>
 <span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"AirPassengers"</span>) <span class="sc">+</span></span>
 <span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(x13_f, <span class="at">series =</span> <span class="st">"X-13 + ETS"</span>) <span class="sc">+</span></span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(mod_jx13<span class="sc">$</span>y_f, <span class="at">series =</span> <span class="st">"X-13"</span>)<span class="sc">+</span> </span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(ets_f, <span class="at">series =</span> <span class="st">"STL + ETS"</span>)<span class="sc">+</span> </span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(est_direct, <span class="at">PI=</span><span class="cn">FALSE</span>, <span class="at">h =</span><span class="dv">12</span>), <span class="at">series =</span> <span class="st">"ETS(M,Ad,M)"</span>)<span class="sc">+</span> </span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(mod_jx13<span class="sc">$</span>y_f, <span class="at">series =</span> <span class="st">"X-13"</span>)<span class="sc">+</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(ets_f, <span class="at">series =</span> <span class="st">"STL + ETS"</span>)<span class="sc">+</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(est_direct, <span class="at">PI=</span><span class="cn">FALSE</span>, <span class="at">h =</span><span class="dv">12</span>), <span class="at">series =</span> <span class="st">"ETS(M,Ad,M)"</span>)<span class="sc">+</span></span>
 <span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autolayer</span>(<span class="fu">forecast</span>(est_direct_bc, <span class="at">PI=</span><span class="cn">FALSE</span>, <span class="at">h =</span><span class="dv">12</span>), <span class="at">series =</span> <span class="st">"ETS(A,N,A) sur log(AirPassengers)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -818,9 +836,8 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<p>Les séries qui semblent avoir les meilleurs prévisions sont X-13 (modèle ARIMA, voir TP 5) et X-13 + ETS. Le moins bon semble l’ETS directement calculé. ::: {.cell}</p>
+<p>Les séries qui semblent avoir les meilleurs prévisions sont X-13 (modèle ARIMA, voir TP 5) et X-13 + ETS. Le moins bon semble l’ETS directement calculé.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fx13_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">h =</span> <span class="dv">12</span>){</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">jx13</span>(x, x13_spec)</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    mod_jx13 <span class="ot">&lt;-</span> <span class="fu">get_indicators</span>(mod_jx13, <span class="fu">c</span>(<span class="st">"sa"</span>, <span class="st">"s_f"</span>))</span>
@@ -840,11 +857,11 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mod_jx13 &lt;- jregarima(y, x13_spec$regarima)</span></span>
 <span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x13_f &lt;- get_indicators(mod_jx13, c("model.y_f"))[[1]]</span></span>
 <span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>    x13_f <span class="ot">&lt;-</span> <span class="fu">window</span>(x13_f, <span class="at">end =</span> <span class="fu">time</span>(x13_f)[h])</span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">method =</span> <span class="st">"X-13ARIMA"</span>, </span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>                          <span class="at">model =</span> mod_jx13, </span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">method =</span> <span class="st">"X-13ARIMA"</span>,</span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>                          <span class="at">model =</span> mod_jx13,</span>
 <span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>                          <span class="at">mean =</span> x13_f,</span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>                          <span class="at">level =</span> <span class="cn">NULL</span>, </span>
-<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>                          <span class="at">lower =</span> <span class="cn">NULL</span>, <span class="at">upper =</span> <span class="cn">NULL</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">series =</span> <span class="cn">NULL</span>, </span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>                          <span class="at">level =</span> <span class="cn">NULL</span>,</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>                          <span class="at">lower =</span> <span class="cn">NULL</span>, <span class="at">upper =</span> <span class="cn">NULL</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">series =</span> <span class="cn">NULL</span>,</span>
 <span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fitted =</span> <span class="cn">NULL</span>, <span class="at">residuals =</span><span class="cn">NULL</span>), <span class="at">class =</span> <span class="st">"forecast"</span>))</span>
 <span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>fstl_ets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">h =</span> <span class="dv">12</span>){</span>
@@ -866,13 +883,21 @@ Jan 1998       365.1537 364.7453 365.5622 364.5291 365.7784</code></pre>
 <span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>erreur <span class="ot">&lt;-</span> <span class="fu">ts.union</span>(e_x13_ets, e_x13, e_stl_est,</span>
 <span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>                  e_ets, e_ets_bc)</span>
 <span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(erreur) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"X-13+ETS"</span>, <span class="st">"X-13"</span>, <span class="st">"STL+ETS"</span>, <span class="st">"ETS"</span>, <span class="st">"log(ETS)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<p>::: Le modèle ARIMA (issu de X-13) semble de meilleure qualité : ::: {.cell}</p>
+</div>
+<p>Le modèle ARIMA (issu de X-13) semble de meilleure qualité :</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(erreur<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>X-13+ETS     X-13  STL+ETS      ETS log(ETS) 
 146.4192 140.2659 202.0902 206.2573 210.5955 </code></pre>
 </div>
-<p>::: :::</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="étude-de-série-économique-lindice-de-production-industrielle" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Étude de série économique : l’indice de production industrielle</h1>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -969,8 +994,8 @@ ets(y = window(y, start = 2021))
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>fets <span class="ot">&lt;-</span> <span class="cf">function</span>(x, h, model_ets){</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">forecast</span>(<span class="fu">ets</span>(</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    x, </span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">paste</span>(model_ets<span class="sc">$</span>components[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">collapse =</span> <span class="st">""</span>), </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    x,</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">paste</span>(model_ets<span class="sc">$</span>components[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">collapse =</span> <span class="st">""</span>),</span>
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">damped =</span> <span class="fu">as.logical</span>(model_ets<span class="sc">$</span>components[<span class="dv">4</span>])</span>
 <span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  ), <span class="at">h =</span> h)</span>
 <span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -982,8 +1007,8 @@ ets(y = window(y, start = 2021))
 <span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>erreur <span class="ot">&lt;-</span> <span class="fu">ts.union</span>(e_ens, e_post_covid_ens)</span>
 <span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>erreur_post_covid <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(<span class="fu">ts.union</span>(e_ens, e_post_covid))</span>
-<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(erreur) <span class="ot">&lt;-</span> </span>
-<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(erreur_post_covid) <span class="ot">&lt;-</span> </span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(erreur) <span class="ot">&lt;-</span></span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(erreur_post_covid) <span class="ot">&lt;-</span></span>
 <span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Ensemble données"</span>, <span class="st">"Post COVID"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Le modèle identifié sur l’ensemble de la période minimise les erreurs de prévision : pour le modèle estimé après la période du COVID (tronquage des données), il y a trop peu de données pour avoir une estimation stable.</p>

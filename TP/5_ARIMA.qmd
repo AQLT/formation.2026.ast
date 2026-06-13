@@ -395,6 +395,7 @@ aus_retail %>%
 	autoplot(filter(aus_retail, year(Month) > 2010), level = NULL)
 ```
 
+# Étude de série économique : l'indice de production industrielle
 
 ::: callout-note
 ## Exercice

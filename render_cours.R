@@ -39,4 +39,6 @@ unlink("_site/Cours", recursive = TRUE)
 
 disable_render()
 
-quarto::quarto_publish_site()
+# quarto::quarto_publish_site()
+system("quarto publish gh-pages")
+browseURL("Cours")

@@ -35,7 +35,7 @@ Faut-il transformer la série ?
 Comparer les prévisions en utilisant des schémas additifs et multiplicatifs et en transformant ou non la série.
 :::
 
-::: {.callout-tip collapse="true"}
+:::: {.callout-tip collapse="true"}
 ## Solution
 ```{r co1-ukgas}
 autoplot(co2) + autoplot(UKgas)
@@ -53,8 +53,10 @@ autoplot(window(co2, start = 1993), y = "Millions de thermies") +
 	autolayer(forecast(ets_co2_add, h = 60, PI = FALSE), "ETS(M,A,A)") +
 	autolayer(forecast(ets_co2_mult, h = 60, PI = FALSE), "ETS(M,Ad,M)")
 ```
+
 Les prévisions très proches sur le court terme mais s'éloignent sur le long terme.
 Cela vient notamment la tendance est amortie dans le modèle multiplicatif.
+
 ```{r ukgas-ets}
 ets_gas_add <- ets(UKgas, model = "ZZA")
 ets_gas_mult <- ets(UKgas, model = "ZZM")
@@ -75,19 +77,23 @@ Sur le plus long terme les résultats sont en revanche différents.
 Passer au log conduit à des estimations plus importantes (notamment lorsque l'on corrige du bais. 
 Rappels : sans correction du biais cela revient à avoir une estimation de la médiane plutôt que moyen, ce qui n'est pas forcément incohérent).
 C'est logique car lorsque l'on passe au log cela revient à supposer que la tendance est également multiplicative.
+
 ```{r ukgas-transform}
 autoplot(window(UKgas, start = 1985), y = "co2")  +
 	autolayer(forecast(ets_gas_mult, h = 60, PI = FALSE), "ETS(M,A,M)") +
 	autolayer(forecast(ets_gas_add_log, h = 60, PI = FALSE), "ETS(A,A,A) sur log(UKgas)") +
 	autolayer(forecast(ets_gas_add_log_unb, h = 60, PI = FALSE), "ETS(A,A,A) sur log(UKgas) corrigé biais")
 ```
+
 Appliquer le modèle $ETS(A,A,A)$ sur la série en logarithme et utiliser le modèle $ETS(M,M,M)$ donnent des résultats similaires.
+
 ```{r ukgas-log-multi}
 autoplot(window(UKgas, start = 1985), y = "co2")  +
 	autolayer(forecast(ets_gas_add_log, h = 60, PI = FALSE), "ETS(A,A,A) sur log(UKgas)") +
 	autolayer(forecast(ets(UKgas, model = "MMM"), h = 60, PI = FALSE), "ETS(M,M,M)")
 ```
-:::
+
+::::
 
 ::: callout-note
 ## Exercice
@@ -110,6 +116,7 @@ Les AIC et les BIC peuvent être extraits avec les fonctions `AIC()` et `BIC()`.
 L'AICc peut être extrait à partir du modèle estimé, par exemple `ets_co2_add$aicc`.
 
 Pour simplifier les fonctions, nous construisons une liste pour rassembler tous les modèles :
+
 ```{r}
 modeles_co2 <- list(
 	"ETS(M,A,A)" = ets_co2_add,
@@ -121,7 +128,9 @@ modeles_gas <- list(
 	"ETS(A,A,A) sur log(UKgas)" = ets_gas_add_log
 )
 ```
-Ce sont toujours les mêmes modèles qui minimisent l'AIC, l'AICc, le BIC et les erreurs de prévision dans l'échantillon : 
+
+Ce sont toujours les mêmes modèles qui minimisent l'AIC, l'AICc, le BIC et les erreurs de prévision dans l'échantillon :
+
 ```{r}
 sapply(modeles_co2, AIC)
 sapply(modeles_co2, `[[`, "aicc")
@@ -133,6 +142,7 @@ sapply(modeles_gas, `[[`, "aicc")
 sapply(modeles_gas, BIC)
 sapply(modeles_gas, function(x) mean(abs(resid(x))))
 ```
+
 Les statistiques sur les résidus peuvent aussi être calculés avec la fonction `forecast::accuracy()` :
 
 ```{r}
@@ -145,6 +155,7 @@ accuracy_gas
 ```
 
 Pour la prévision hors échantillon, nous allons construire une fonction par modèle prenant comme paramètre la série brute et l'horizon de prévision et qui renvoie la série prévue :
+
 ```{r}
 f_co2 <- list(
 	"ETS(M,A,A)" = function(x, h) {
@@ -165,18 +176,19 @@ f_gas <- list(
 	forecast(ets(x, model = "AAA", lambda = 0), h = h)
 }
 )
-# Exemple : 
+# Exemple :
 f_co2[[1]](co2, 1)
 ```
+
 Pour estimer les modèles hors échantillon, nous allons utiliser au moins 10 ans de données pour la base `co2` (sur 39 années) et pour la base `UKgas` (sur 27 ans).
 C'est toujours les mêmes modèles qui minimisent ces erreurs :
+
 ```{r}
 e_co2 <- lapply(f_co2, tsCV, y = co2, h = 1, initial = 10 * 12)
 e_gas <- lapply(f_gas, tsCV, y = UKgas, h = 1, initial = 10 * 4)
 sapply(e_co2, function(x) mean(abs(x), na.rm = TRUE))
 sapply(e_gas, function(x) mean(abs(x), na.rm = TRUE))
 ```
-
 
 :::
 
@@ -210,6 +222,7 @@ b.  les prévisions de la saisonnalité pour la méthode X-13-ARIMA.
 ::: {.callout-caution collapse="true"}
 ## Indice
 Pour récupérer la composante saisonnière avec X-13 on pourra utiliser le code suivant :
+
 ```{r}
 library(RJDemetra)
 y <- window(ipi_c_eu[,"FR"], start = 2010)
@@ -219,7 +232,9 @@ ggdemetra::seasonal(mod_x13)
 ggdemetra::seasonaladj(mod_x13)
 ggdemetra::seasonal(mod_x13, forecast = TRUE)
 ```
+
 Si l'on veut une version plus rapide du code on peut également utiliser cette option :
+
 ```{r}
 mod_jx13 <- jx13(y, x13_spec)
 saisonnalite <- get_indicators(mod_jx13, c("s", "sa", "s_f", "y_f"))
@@ -229,7 +244,9 @@ saisonnalite[["s_f"]]
 # On a d'ailleurs directement une prévision de la série brute qui est faite par modèle ARIMA
 saisonnalite[["y_f"]]
 ```
+
 Pour la fonction `tsCV()` on pourra utiliser la fonction suivante pour X-13 :
+
 ```{r}
 fx13_ets <- function(x, h){
 	mod_jx13 <- jx13(x, x13_spec)
@@ -256,7 +273,7 @@ mod_stl <- stl(log(y), s.window = "periodic")
 x13_spec <- x13_spec(easter.enabled = FALSE)
 mod_jx13 <- jx13(y, x13_spec)
 mod_jx13 <- get_indicators(mod_jx13, c("s", "sa", "s_f", "y_f"))
-autoplot(exp(seasadj(mod_stl))) + 
+autoplot(exp(seasadj(mod_stl))) +
 	autolayer(mod_jx13$sa)
 
 ets_x13 <- ets(mod_jx13$sa)
@@ -277,13 +294,15 @@ est_direct_bc <- ets(y, lambda = 0)
 autoplot(window(AirPassengers, start = end(AirPassengers) - c(1, 0)),
 		 y = "AirPassengers") +
 	autolayer(x13_f, series = "X-13 + ETS") +
-	autolayer(mod_jx13$y_f, series = "X-13")+ 
-	autolayer(ets_f, series = "STL + ETS")+ 
-	autolayer(forecast(est_direct, PI=FALSE, h =12), series = "ETS(M,Ad,M)")+ 
+	autolayer(mod_jx13$y_f, series = "X-13")+
+	autolayer(ets_f, series = "STL + ETS")+
+	autolayer(forecast(est_direct, PI=FALSE, h =12), series = "ETS(M,Ad,M)")+
 	autolayer(forecast(est_direct_bc, PI=FALSE, h =12), series = "ETS(A,N,A) sur log(AirPassengers)")
 ```
-Les séries qui semblent avoir les meilleurs prévisions sont X-13 (modèle ARIMA, voir TP 5) et X-13 + ETS. 
+
+Les séries qui semblent avoir les meilleurs prévisions sont X-13 (modèle ARIMA, voir TP 5) et X-13 + ETS.
 Le moins bon semble l'ETS directement calculé.
+
 ```{r}
 fx13_ets <- function(x, h = 12){
 	mod_jx13 <- jx13(x, x13_spec)
@@ -304,11 +323,11 @@ fx13 <- function(x, h = 12){
 	# mod_jx13 <- jregarima(y, x13_spec$regarima)
 	# x13_f <- get_indicators(mod_jx13, c("model.y_f"))[[1]]
 	x13_f <- window(x13_f, end = time(x13_f)[h])
-	return(structure(list(method = "X-13ARIMA", 
-						  model = mod_jx13, 
+	return(structure(list(method = "X-13ARIMA",
+						  model = mod_jx13,
 						  mean = x13_f,
-						  level = NULL, 
-						  lower = NULL, upper = NULL, x = NULL, series = NULL, 
+						  level = NULL,
+						  lower = NULL, upper = NULL, x = NULL, series = NULL,
 						  fitted = NULL, residuals =NULL), class = "forecast"))
 }
 fstl_ets <- function(x, h = 12){
@@ -331,11 +350,15 @@ erreur <- ts.union(e_x13_ets, e_x13, e_stl_est,
 				  e_ets, e_ets_bc)
 colnames(erreur) <- c("X-13+ETS", "X-13", "STL+ETS", "ETS", "log(ETS)")
 ```
+
 Le modèle ARIMA (issu de X-13) semble de meilleure qualité :
+
 ```{r}
 colMeans(erreur^2, na.rm = TRUE)
 ```
 :::
+
+# Étude de série économique : l'indice de production industrielle
 
 ::: callout-note
 ## Exercice
@@ -343,7 +366,7 @@ L'objectif de cette exercice est d'étudier la série `AQLTrainings::ipi_c_eu_ns
 
 1. La série présentent-elle des ruptures et si oui à quelles dates ?
 
-2. Appliquer un modèle ETS sur l'ensemble de la série et sur la série tronquée après rupture. 
+2. Appliquer un modèle ETS sur l'ensemble de la série et sur la série tronquée après rupture.
 Comparer les résultats.
 :::
 
@@ -351,6 +374,7 @@ Comparer les résultats.
 ::: {.callout-tip collapse="true"}
 ## Solution
 1. La saisonnalité est forte et peut masquer certaines ruptures mais on observe clairement un choc en niveau fin 2008 et différents chocs en 2020.
+
 ```{r ipi-autoplot}
 y <- AQLTrainings::ipi_c_eu_nsa[, "FR"]
 autoplot(y)
@@ -358,18 +382,19 @@ autoplot(y)
 
 2. On estime un modèle après 2021 et un modèle sur l'ensemble de la période.
 Le premier modèle utilise peu de données (possiblement plus de révisions sur l'estimation des paramètres) mais est adapté aux dernières données.
+
 ```{r ipi-est-modeles}
 ets_ens <- ets(y)
 ets_ens
 ets_post_covid <- ets(window(y, start = 2021))
 ets_post_covid
 ```
-Comparons maintenant les résultats des deux modèles sur 
+Comparons maintenant les résultats des deux modèles sur
 ```{r ipi-comp-prev}
 fets <- function(x, h, model_ets){
   forecast(ets(
-    x, 
-    model = paste(model_ets$components[1:3], collapse = ""), 
+    x,
+    model = paste(model_ets$components[1:3], collapse = ""),
     damped = as.logical(model_ets$components[4])
   ), h = h)
 }
@@ -381,11 +406,13 @@ e_post_covid <- tsCV(window(y,start = 2021), fets, h = 1, initial = 2*12, model_
 
 erreur <- ts.union(e_ens, e_post_covid_ens)
 erreur_post_covid <- na.omit(ts.union(e_ens, e_post_covid))
-colnames(erreur) <- 
-  colnames(erreur_post_covid) <- 
+colnames(erreur) <-
+  colnames(erreur_post_covid) <-
   c("Ensemble données", "Post COVID")
 ```
+
 Le modèle identifié sur l'ensemble de la période minimise les erreurs de prévision : pour le modèle estimé après la période du COVID (tronquage des données), il y a trop peu de données pour avoir une estimation stable.
+
 ```{r}
 colMeans(erreur^2, na.rm = TRUE)
 colMeans(erreur_post_covid^2, na.rm = TRUE)

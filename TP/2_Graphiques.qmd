@@ -55,6 +55,7 @@ La série `gold` correspond à la série journalière des prix de l'or hors vend
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 `gold` représente les prix journaliers de l'or en dollar (hors vendredi et samedi) entre le 1er janvier 1985 et le 31 Mars 1989. 
 Il semble y avoir des valeurs manquantes, un point atypique autour de l'observation 750. 
 Une tendance plutôt à la hausse jusqu'à cette observation puis une tendance à la baisse. 
@@ -66,17 +67,16 @@ autoplot(gold, y = "Prix en $",
 ```
 
 `woolyrnq` représente la production trimestrielle de laine en Australie (en tonnes) entre le premier trimestre 1965 et le troisième trimestre 1994. 
+
 ```{r woolyrnq}
 autoplot(woolyrnq, y = "tonnes",
 		 main = "Production trimestrielle de laine en Australie")
 ```
-`gas` représente la production mensuelle de gaz en Australie entre janvier 1956 et août 1995
+
+`gas` représente la production mensuelle de gaz en Australie entre janvier 1956 et août 1995.
+
 ```{r gas}
 autoplot(gas, main = "Production mensuelle de gaz en Australie")
-```
-
-
-```{r}
 # Point atypique net pour la série gold à l'observation 770
 which.max(gold)
 gold[which.max(gold)]
@@ -85,6 +85,7 @@ hors_wd = dates[lubridate::wday(dates,week_start = 1) %in% c(1:4,7)] # on ne pre
 length(hors_wd) - length(gold) # on a bien le même nombre d'observations
 hors_wd[which.max(gold)]
 ```
+
 :::
 
 ::: callout-note
@@ -94,14 +95,18 @@ Analyser les séries de `fpp3::aus_arrivals` (arrivées internationales trimestr
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r aus-arrivals}
 aus_arrivals %>% autoplot(Arrivals)
 ```
+
 Le nombre d'arrivées augmentent avec le temps, sauf ceux en provenance du Japon après 1995.
-Les séries semblent saisonnières avec une saisonnalité qui dépend du niveau (sauf pour US) et on observe un changement de saisonnalité pour les arrivées en provenance du Japon
+Les séries semblent saisonnières avec une saisonnalité qui dépend du niveau (sauf pour US) et on observe un changement de saisonnalité pour les arrivées en provenance du Japon.
+
 ```{r aus-arrivals-season}
 aus_arrivals %>% gg_season(Arrivals)
 ```
+
 Remarque : le multivarié ne marche pas avec forecast.
 `forecast::ggseasonplot(arrivals)` donne une erreur.
 
@@ -110,9 +115,11 @@ arrivées plus élevées aux T1 et T4 pour le Royaume-Uni.
 elles sont plus faibles au T1 pour la Nouvelle-Zélande et au plus haut au T3.
 Pour le Japon : plus faibles aux T2 et T4 sur années récentes.
 Pour les États-Unis le graphique n'est pas facile à lire
+
 ```{r aus-arrivals-subseries}
 aus_arrivals %>% gg_subseries(Arrivals)
 ```
+
 Pour le Royaume-Uni la hausse des entrées est surtout saisonnière (forte hausse aux T1 et T3).
 Depuis les États-Unis et la Nouvelle-Zélande la hausse semble la même sur tous les trimestres.
 
@@ -129,26 +136,36 @@ En utilisant les différentes fonctions apprises pour tracer les graphiques (`au
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r hsales}
 autoplot(hsales)
 ```
+
 Pas de tendance, il semble il y avoir une saisonnalité et un cycle
+
 ```{r hsales-season}
 ggseasonplot(hsales)
 ```
+
 Les ventes semblent plus faibles en janv-déc et plus élevées en mars
+
 ```{r hsales-subseries}
 ggsubseriesplot(hsales)
 ```
+
 On retrouve en moyenne les résultats précédents mais les variations des coefficients saisonniers laissent penser à un cycle
+
 ```{r hsales-lag}
 gglagplot(hsales)
 ```
+
 Forte corrélation avec les valeurs précédentes et les valeurs saisonnières
+
 ```{r hsales-acf}
 ggAcf(hsales)
 ggAcf(hsales, 12*7)
 ```
+
 En augmentant le nombre de lag on repère plus facilement les cycles longs (environ 8 ans).
 :::
 
@@ -176,6 +193,7 @@ Il faut utiliser les paramètres `spectrum(., detrend = FALSE, log = "no")`.
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r spectre-tendance}
 t = ts(1:100, frequency = 12, start = 2000)
 spectrum(t, 
@@ -184,6 +202,7 @@ spectrum(t,
 spectrum(t, 
 		 method = "ar", log = "no")
 ```
+
 :::
 
 ::: callout-note
@@ -193,6 +212,7 @@ Calculer le périodogramme et le spectre autorégressif d'une série mensuelle s
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r spectre-saisonnalite}
 s = ts(0, frequency = 12, start = 2000, end = 2020)
 s[cycle(s) == 2] <- 1
@@ -202,6 +222,7 @@ spectrum(s,
 spectrum(s, 
 		 method = "ar", log = "no")
 ```
+
 :::
 
 ::: callout-note
@@ -211,6 +232,7 @@ Calculer le périodogramme et le spectre autorégressif d'une cycle de 36 mois.
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r spectre-cycle}
 c = ts(cos(2*pi/36*(1:100)) + sin(2*pi/36*(1:100)), frequency = 12, start = 2000)
 spectrum(c, 
@@ -219,11 +241,13 @@ spectrum(c,
 spectrum(c, 
 		 method = "ar", log = "no")
 ```
+
 :::
 
 ::: callout-note
 ## Exercice
 Pourquoi a-t-on un spectre différent en simulant un cycle de cette façon ?
+
 ```{r spectre-cycle-saison}
 c = ts(0, frequency = 12, start = 2000, end = 2020)
 c[cycle(c) == 12][c(TRUE, FALSE, FALSE)] <- 1
@@ -231,6 +255,7 @@ c
 spectrum(c, 
 		 method = "pgram", log = "no")
 ```
+
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -245,6 +270,7 @@ Calculer le périodogramme d'un bruit blanc (utiliser `rnorm()`).
 
 ::: {.callout-tip collapse="true"}
 ## Solution
+
 ```{r spectre-irregulier}
 set.seed(1)
 i = ts(rnorm(100), frequency = 12, start = 2000)
@@ -254,6 +280,7 @@ spectrum(i,
 spectrum(i, 
 		 method = "ar", log = "no")
 ```
+
 Question supplémentaire : à quoi correspond la droite du graphique précédent ?
 
 Cela correspond à $\mathbb V[i]/frequence \simeq$ `r formatC(var(i)/frequency(i), digits = 3, format = "f", decimal.mark = ",")`.
@@ -283,17 +310,23 @@ Pour les séries suivantes, étudier s'il faut faire une transformation de Box-C
 ```{r jj}
 autoplot(JohnsonJohnson)
 ```
+
 Il semble y avoir une saisonnalité plus importante lorsque la série est élevée et la tendance semble exponentielle.
+
 ```{r jj-log}
 autoplot(BoxCox(JohnsonJohnson, 0))
 ```
+
 La transformation en log semble trop forte : la variabilité au début de la série est plus importante qu'en fin de série.
+
 ```{r jj-bc}
 (autoplot(BoxCox(JohnsonJohnson, 0.5)) + autoplot(BoxCox(JohnsonJohnson, 0.3))) /
 	(autoplot(BoxCox(JohnsonJohnson, 0.1)) + autoplot(BoxCox(JohnsonJohnson, 0.2)))
 ```
+
 La racine carrée n'est assez forte mais les autres transformations semblent donner de bons résultats. 
 La méthode Guerrero donne $\lambda = 0,15$.
+
 ```{r}
 BoxCox.lambda(JohnsonJohnson)
 ```
@@ -301,12 +334,15 @@ BoxCox.lambda(JohnsonJohnson)
 ```{r AirPassengers}
 autoplot(AirPassengers)
 ```
+
 Il semble y avoir une saisonnalité plus importante lorsque la série est élevée .
+
 ```{r AirPassengers-bc}
 autoplot(BoxCox(AirPassengers, 0))
 BoxCox.lambda(AirPassengers)
 autoplot(BoxCox(AirPassengers, BoxCox.lambda(AirPassengers))) + autoplot(log(AirPassengers))
 ```
+
 La transformation en log semble suffisante.
 La méthode Guerrero donne $\lambda = -0,3$. 
 Le graphique est proche de celui du passage au logarithme : la recommandation est de garder la transformation en logarithme, plus explicable.
@@ -316,6 +352,7 @@ autoplot(co2)
 BoxCox.lambda(co2)
 autoplot(co2) + autoplot(log(co2))
 ```
+
 Une tendance linéaire mais la saisonnalité n'est pas proportionnelle au niveau
 Aucune transformation n'est nécessaire.
 La méthode Guerrero donne $\lambda = 0,0$ (log) sans que cela change les résultats.
@@ -325,17 +362,23 @@ autoplot(usdeaths)
 BoxCox.lambda(usdeaths)
 autoplot(usdeaths) + autoplot(BoxCox(usdeaths, 0))
 ```
+
 Pas de tendance : aucune transformation n'est nécessaire.
 La méthode Guerrero donne $\lambda = 0,0$ (log) sans que cela change les résultats.
+
 ```{r usgdp}
 autoplot(usgdp)
 ```
-On observe une tendance exponentielle : il peut être utile de faire une transformation
+
+On observe une tendance exponentielle : il peut être utile de faire une transformation.
+
 ```{r usgdp-log}
 autoplot(BoxCox(usgdp, 0))
 ```
+
 La transformation en log semble suffisante,  peut-être légèrement trop forte.
 La méthode Guerrero donne $\lambda = 0,36$.
+
 ```{r usgdp-bc}
 BoxCox.lambda(usgdp)
 autoplot(BoxCox(usgdp, 0))  + 
@@ -343,14 +386,17 @@ autoplot(BoxCox(usgdp, 0))  +
 	autoplot(BoxCox(usgdp, BoxCox.lambda(usgdp)))  + 
     geom_smooth(method='lm', formula= y~x, size = 0.5)
 ```
+
 :::
 
 ::: callout-note
 ## Exercice
 Pourquoi la transformation de Box-Cox n'est pas adaptée à la série `expsmooth::cangas` ?
+
 ```{r cangas}
 autoplot(cangas)
 ```
+
 :::
 
 ::: {.callout-tip collapse="true"}

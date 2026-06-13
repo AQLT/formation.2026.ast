@@ -254,19 +254,20 @@ window.Quarto = {
 <p>Les packages suivants seront utilisés :</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>packages_to_install <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ggplot2"</span>, <span class="st">"forecast"</span>, <span class="st">"RJDemetra"</span>, <span class="st">"patchwork"</span>, <span class="st">"lmtest"</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"tsibble"</span>, <span class="st">"fable"</span>, <span class="st">"feasts"</span>, <span class="st">"dplyr"</span>, <span class="st">"lubridate"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> packages_to_install[<span class="sc">!</span> packages_to_install <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(packages) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(packages)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"tsibble"</span>, <span class="st">"fable"</span>, <span class="st">"feasts"</span>, <span class="st">"dplyr"</span>, <span class="st">"lubridate"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"AQLTrainings"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> packages_to_install[<span class="sc">!</span> packages_to_install <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(packages) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(packages, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">'https://aqlt.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Le but des prochains exercices est d’étudier les séries classiques</p>
 <ul>
 <li><p><code>LakeHuron</code> niveau annuel du Lac de Huron ;</p></li>
 <li><p><code>sunspot.year</code> nombre annuel de tâches solaires entre 1770 et 1869 ;</p></li>
 <li><p><code>AirPassengers</code> nombre mensuel de passagers aériens ;</p></li>
-<li><p><code>nottem</code> température mensuelle moyenne au chateau de Nottingham.</p></li>
+<li><p><code>nottem</code> température mensuelle moyenne au château de Nottingham.</p></li>
 </ul>
 <section id="niveau-du-lac-de-huron" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Niveau du Lac de Huron</h1>

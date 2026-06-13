@@ -13,3 +13,5 @@ quiz_files
 *.log
 
 **/*.quarto_ipynb
+
+_freeze

@@ -397,13 +397,13 @@ Frequency = 1
 </div>
 <p>Explication : lorsque l’on spécifie le paramètre <code>frequency</code> dans la fonction <code>window()</code>, on change la fréquence de la série. Dans notre cas, on veut extraire les valeurs du deuxième trimestre : on veut donc une série annuelle qui contient toutes les valeurs des deuxièmes trimestres. La première observation de <code>ts_object</code> étant un deuxième trimestre, cela donne ce que l’on veut. Pour extraire les valeurs des troisièmes trimestres il faut en plus changer la date de début :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">window</span>(ts_object, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1950</span>, <span class="dv">3</span>), <span class="at">frequency =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">window</span>(ts_object, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1959</span>, <span class="dv">3</span>), <span class="at">frequency =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Time Series:
-Start = 1959.25 
-End = 1961.25 
+Start = 1959.5 
+End = 1961.5 
 Frequency = 1 
-[1] 1 5 9</code></pre>
+[1]  2  6 10</code></pre>
 </div>
 </div>
 </div>
@@ -1288,22 +1288,28 @@ Frequency = 4
 <p>Pour extraire les données à partir d’un certain mois (mars 2018 par exemple) on peut utiliser la fonction <code>tsibble::make_yearmonth()</code> :</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>ipi_tsibble <span class="sc">%&gt;%</span> </span>
-<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">&gt;=</span> <span class="fu">make_yearmonth</span>(<span class="dv">2000</span>,<span class="dv">6</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(index <span class="sc">&gt;=</span> <span class="fu">make_yearmonth</span>(<span class="dv">2018</span>, <span class="dv">6</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tsibble: 58 x 2 [1M]
+<pre><code># A tsibble: 17 x 2 [1M]
       index value
       &lt;mth&gt; &lt;dbl&gt;
- 1 2015 Jan  99  
- 2 2015 Feb  99.4
- 3 2015 Mar  99.7
- 4 2015 Apr  99.4
- 5 2015 May 101. 
- 6 2015 Jun 100  
- 7 2015 Jul  98.7
- 8 2015 Aug 100. 
- 9 2015 Sep 101. 
-10 2015 Oct 101. 
-# ℹ 48 more rows</code></pre>
+ 1 2018 Jun  104.
+ 2 2018 Jul  104 
+ 3 2018 Aug  105.
+ 4 2018 Sep  103.
+ 5 2018 Oct  104.
+ 6 2018 Nov  103.
+ 7 2018 Dec  104.
+ 8 2019 Jan  105.
+ 9 2019 Feb  106.
+10 2019 Mar  104.
+11 2019 Apr  104.
+12 2019 May  106 
+13 2019 Jun  104.
+14 2019 Jul  104.
+15 2019 Aug  103.
+16 2019 Sep  104.
+17 2019 Oct  104.</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">

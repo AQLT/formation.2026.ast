@@ -205,12 +205,9 @@ window.Quarto = {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#manipulation-graphique" id="toc-manipulation-graphique" class="nav-link active" data-scroll-target="#manipulation-graphique"><span class="header-section-number">1</span> Manipulation graphique</a>
-  <ul class="collapse">
-  <li><a href="#analyse-graphique-temporelle" id="toc-analyse-graphique-temporelle" class="nav-link" data-scroll-target="#analyse-graphique-temporelle"><span class="header-section-number">1.1</span> Analyse graphique temporelle</a></li>
-  <li><a href="#densité-spectrale" id="toc-densité-spectrale" class="nav-link" data-scroll-target="#densité-spectrale"><span class="header-section-number">1.2</span> Densité spectrale</a></li>
-  </ul></li>
+  <li><a href="#analyse-graphique-temporelle" id="toc-analyse-graphique-temporelle" class="nav-link active" data-scroll-target="#analyse-graphique-temporelle"><span class="header-section-number">1</span> Analyse graphique temporelle</a></li>
   <li><a href="#transformation-des-séries" id="toc-transformation-des-séries" class="nav-link" data-scroll-target="#transformation-des-séries"><span class="header-section-number">2</span> Transformation des séries</a></li>
+  <li><a href="#densité-spectrale" id="toc-densité-spectrale" class="nav-link" data-scroll-target="#densité-spectrale"><span class="header-section-number">3</span> Densité spectrale</a></li>
   </ul>
 </nav>
     </div>
@@ -264,10 +261,8 @@ window.Quarto = {
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp2)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="manipulation-graphique" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Manipulation graphique</h1>
-<section id="analyse-graphique-temporelle" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="analyse-graphique-temporelle"><span class="header-section-number">1.1</span> Analyse graphique temporelle</h2>
+<section id="analyse-graphique-temporelle" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Analyse graphique temporelle</h1>
 <p>Le but des prochains exercices est de mettre en pratique les différentes fonctions pour tracer les graphiques vues en cours.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -415,7 +410,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Remarque : le multivarié ne marche pas avec forecast. <code>forecast::ggseasonplot(arrivals)</code> donne une erreur.</p>
-<p>La saisonnalité est différente entre chaque pays : arrivées plus élevées aux T1 et T4 pour le Royaume-Uni. elles sont plus faibles au T1 pour la Nouvelle-Zélande et au plus haut au T3. Pour le Japon : plus faibles aux T2 et T4 sur années récentes. Pour les États-Unis le graphique n’est pas facile à lire</p>
+<p>La saisonnalité est différente entre chaque pays : arrivées plus élevées aux T1 et T4 pour le Royaume-Uni. elles sont plus faibles au T1 pour la Nouvelle-Zélande et au plus haut au T3. Pour le Japon : plus faibles aux T2 et T4 sur années récentes. Pour les États-Unis le graphique n’est pas facile à lire.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> <span class="fu">gg_subseries</span>(Arrivals)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -426,7 +421,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Pour le Royaume-Uni la hausse des entrées est surtout saisonnière (forte hausse aux T1 et T3). Depuis les États-Unis et la Nouvelle-Zélande la hausse semble la même sur tous les trimestres.</p>
+<p>Pour le Royaume-Uni la hausse des entrées est surtout saisonnière (forte hausse aux T1 et T4). Depuis les États-Unis et la Nouvelle-Zélande la hausse semble la même sur tous les trimestres.</p>
 <p>Plusieurs points atypiques s’observent, par exemple :</p>
 <ul>
 <li>2000T3 pour les US (JO)<br>
@@ -528,8 +523,247 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="densité-spectrale" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="densité-spectrale"><span class="header-section-number">1.2</span> Densité spectrale</h2>
+<section id="transformation-des-séries" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Transformation des séries</h1>
+<p>L’objectif des exercices qui suivent est d’étudier la transformation de Box-Cox <span class="math display">\[
+f_\lambda(x)=\begin{cases}
+\log(x)&amp;\text{ si }\lambda=0\\
+\frac{sign(x)|x|^\lambda -1}{
+\lambda
+}&amp;\text{ si }\lambda\ne0
+\end{cases}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour les séries suivantes, étudier s’il faut faire une transformation de Box-Cox et si oui trouver un <span class="math inline">\(\lambda\)</span> satisfaisant et vérifier le résultat avec <code>forecast::BoxCox.lambda()</code> : <code>datasets::JohnsonJohnson</code>, <code>datasets::AirPassengers</code>, <code>datasets::co2</code>, <code>fma::usdeaths</code>, <code>expsmooth::usgdp</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(JohnsonJohnson)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/jj-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Il semble y avoir une saisonnalité plus importante lorsque la série est élevée et la tendance semble exponentielle.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/jj-log-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La transformation en log semble trop forte : la variabilité au début de la série est plus importante qu’en fin de série.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.5</span>)) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.3</span>))) <span class="sc">/</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.1</span>)) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.2</span>)))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/jj-bc-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La racine carrée n’est assez forte mais les autres transformations semblent donner de bons résultats. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,15\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(JohnsonJohnson)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1540752</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(AirPassengers)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/AirPassengers-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Il semble y avoir une saisonnalité plus importante lorsque la série est élevée .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(AirPassengers, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/AirPassengers-bc-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(AirPassengers)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.2947156</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(AirPassengers, <span class="fu">BoxCox.lambda</span>(AirPassengers))) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">log</span>(AirPassengers))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/AirPassengers-bc-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La transformation en log semble suffisante. La méthode Guerrero donne <span class="math inline">\(\lambda = -0,3\)</span>. Le graphique est proche de celui du passage au logarithme : la recommandation est de garder la transformation en logarithme, plus explicable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(co2)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/co2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(co2)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.03432107</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(co2) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">log</span>(co2))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/co2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Une tendance linéaire mais la saisonnalité n’est pas proportionnelle au niveau Aucune transformation n’est nécessaire. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,0\)</span> (log) sans que cela change les résultats.</p>
+<pre class="{rusdeaths-bc}"><code>autoplot(usdeaths)
+BoxCox.lambda(usdeaths)
+autoplot(usdeaths) + autoplot(BoxCox(usdeaths, 0))</code></pre>
+<p>Pas de tendance : aucune transformation n’est nécessaire. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,0\)</span> (log) sans que cela change les résultats.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(usgdp)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/usgdp-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>On observe une tendance exponentielle : il peut être utile de faire une transformation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/usgdp-log-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La transformation en log semble suffisante, peut-être légèrement trop forte. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,36\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(usgdp)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.366352</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="dv">0</span>))  <span class="sc">+</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">formula=</span> y<span class="sc">~</span>x, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="fu">BoxCox.lambda</span>(usgdp)))  <span class="sc">+</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">formula=</span> y<span class="sc">~</span>x, <span class="at">size =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/usgdp-bc-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pourquoi la transformation de Box-Cox n’est pas adaptée à la série <code>expsmooth::cangas</code> ?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(cangas)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/cangas-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>On observe une tendance générale à la hausse et une saisonnalité. En revanche cette saisonnalité n’est pas proportionnelle au niveau : entre 1960 et 1970 elle semble proportionnelle au niveau mais entre 1975 et 1990 le niveau de la série est globalement stable mais la variance augmente.</p>
+<p>La transformation de Box-Cox n’est adaptée que lorsque la variabilité de la série est proportionnelle à son niveau.</p>
+</div>
+</div>
+</div>
+<p>Les précédents exercices portaient uniquement les fonctions de <code>forecast</code>. Pour appliquer la méthode Guerrero avec un objet <code>tsibble</code> on peut utiliser la fonction <code>features(., features = guerrero)</code> :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">features</span>(<span class="at">features =</span> guerrero)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  Origin lambda_guerrero
+  &lt;chr&gt;            &lt;dbl&gt;
+1 Japan           0.254 
+2 NZ              0.332 
+3 UK             -0.0511
+4 US              0.190 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">features</span>(<span class="at">features =</span> guerrero) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(lambda_guerrero)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  0.25392556  0.33202070 -0.05108145  0.19043694</code></pre>
+</div>
+</div>
+</section>
+<section id="densité-spectrale" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Densité spectrale</h1>
 <p>Le but de ces exercices est de calculer les densités spectrales des différentes composantes :</p>
 <ul>
 <li>tendance<br>
@@ -555,7 +789,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -564,14 +798,14 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Il faut utiliser les paramètres <code>spectrum(., detrend = FALSE, log = "no")</code>.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -580,13 +814,13 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(t, </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(t, </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -594,8 +828,8 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(t, </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(t, </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -621,7 +855,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -630,14 +864,14 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">0</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2020</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>s[<span class="fu">cycle</span>(s) <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(s, </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">0</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2020</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>s[<span class="fu">cycle</span>(s) <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(s, </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -645,8 +879,8 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(s, </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(s, </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -672,7 +906,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -681,13 +915,13 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">ts</span>(<span class="fu">cos</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">36</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)) <span class="sc">+</span> <span class="fu">sin</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">36</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)), <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">ts</span>(<span class="fu">cos</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">36</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)) <span class="sc">+</span> <span class="fu">sin</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">36</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)), <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -695,8 +929,8 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -720,9 +954,9 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <p>Pourquoi a-t-on un spectre différent en simulant un cycle de cette façon ?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">0</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2020</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>c[<span class="fu">cycle</span>(c) <span class="sc">==</span> <span class="dv">12</span>][<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>c</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">ts</span>(<span class="dv">0</span>, <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2020</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>c[<span class="fu">cycle</span>(c) <span class="sc">==</span> <span class="dv">12</span>][<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>c</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 2000   0   0   0   0   0   0   0   0   0   0   0   1
@@ -747,8 +981,8 @@ window.Quarto = {
 2019   0   0   0   0   0   0   0   0   0   0   0   0
 2020   0                                            </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(c, </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -760,7 +994,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -769,7 +1003,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Car la série construire reste saisonnière (même valeurs dans les mois autres que décembre) !</p>
 </div>
@@ -789,249 +1023,6 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Astuce</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(i, </span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/spectre-irregulier-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(i, </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/spectre-irregulier-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Question supplémentaire : à quoi correspond la droite du graphique précédent ?</p>
-<p>Cela correspond à <span class="math inline">\(\mathbb V[i]/frequence \simeq\)</span> 0,067.</p>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="transformation-des-séries" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Transformation des séries</h1>
-<p>L’objectif des exercices qui suivent est d’étudier la transformation de Box-Cox <span class="math display">\[
-f_\lambda(x)=\begin{cases}
-\log(x)&amp;\text{ si }\lambda=0\\
-\frac{sign(x)|x|^\lambda -1}{
-\lambda
-}&amp;\text{ si }\lambda\ne0
-\end{cases}
-\]</span></p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercice
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pour les séries suivantes, étudier s’il faut faire une transformation de Box-Cox et si oui trouver un <span class="math inline">\(\lambda\)</span> satisfaisant et vérifier le résultat avec <code>forecast::BoxCox.lambda()</code> : <code>datasets::JohnsonJohnson</code>, <code>datasets::AirPassengers</code>, <code>datasets::co2</code>, <code>fma::usdeaths</code>, <code>expsmooth::usgdp</code>.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Astuce</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(JohnsonJohnson)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/jj-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Il semble y avoir une saisonnalité plus importante lorsque la série est élevée et la tendance semble exponentielle.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/jj-log-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>La transformation en log semble trop forte : la variabilité au début de la série est plus importante qu’en fin de série.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.5</span>)) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.3</span>))) <span class="sc">/</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.1</span>)) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(JohnsonJohnson, <span class="fl">0.2</span>)))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/jj-bc-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>La racine carrée n’est assez forte mais les autres transformations semblent donner de bons résultats. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,15\)</span>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(JohnsonJohnson)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1540752</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(AirPassengers)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/AirPassengers-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Il semble y avoir une saisonnalité plus importante lorsque la série est élevée .</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(AirPassengers, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/AirPassengers-bc-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(AirPassengers)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.2947156</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(AirPassengers, <span class="fu">BoxCox.lambda</span>(AirPassengers))) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">log</span>(AirPassengers))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/AirPassengers-bc-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>La transformation en log semble suffisante. La méthode Guerrero donne <span class="math inline">\(\lambda = -0,3\)</span>. Le graphique est proche de celui du passage au logarithme : la recommandation est de garder la transformation en logarithme, plus explicable.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(co2)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/co2-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(co2)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.03432107</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(co2) <span class="sc">+</span> <span class="fu">autoplot</span>(<span class="fu">log</span>(co2))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/co2-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Une tendance linéaire mais la saisonnalité n’est pas proportionnelle au niveau Aucune transformation n’est nécessaire. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,0\)</span> (log) sans que cela change les résultats.</p>
-<pre class="{rusdeaths-bc}"><code>autoplot(usdeaths)
-BoxCox.lambda(usdeaths)
-autoplot(usdeaths) + autoplot(BoxCox(usdeaths, 0))</code></pre>
-<p>Pas de tendance : aucune transformation n’est nécessaire. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,0\)</span> (log) sans que cela change les résultats.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(usgdp)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/usgdp-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>On observe une tendance exponentielle : il peut être utile de faire une transformation.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="dv">0</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/usgdp-log-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>La transformation en log semble suffisante, peut-être légèrement trop forte. La méthode Guerrero donne <span class="math inline">\(\lambda = 0,36\)</span>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BoxCox.lambda</span>(usgdp)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.366352</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="dv">0</span>))  <span class="sc">+</span> </span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">formula=</span> y<span class="sc">~</span>x, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autoplot</span>(<span class="fu">BoxCox</span>(usgdp, <span class="fu">BoxCox.lambda</span>(usgdp)))  <span class="sc">+</span> </span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>, <span class="at">formula=</span> y<span class="sc">~</span>x, <span class="at">size =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/usgdp-bc-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercice
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pourquoi la transformation de Box-Cox n’est pas adaptée à la série <code>expsmooth::cangas</code> ?</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(cangas)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2_Graphiques_files/figure-html/cangas-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1043,29 +1034,32 @@ autoplot(usdeaths) + autoplot(BoxCox(usdeaths, 0))</code></pre>
 </div>
 <div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>On observe une tendance générale à la hausse et une saisonnalité. En revanche cette saisonnalité n’est pas proportionnelle au niveau : entre 1960 et 1970 elle semble proportionnelle au niveau mais entre 1975 et 1990 le niveau de la série est globalement stable mais la variance augmente.</p>
-<p>La transformation de Box-Cox n’est adaptée que lorsque la variabilité de la série est proportionnelle à son niveau.</p>
-</div>
-</div>
-</div>
-<p>Les précédents exercices portaient uniquement les fonctions de <code>forecast</code>. Pour appliquer la méthode Guerrero avec un objet <code>tsibble</code> on peut utiliser la fonction <code>features(., features = guerrero)</code> :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> </span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">features</span>(<span class="at">features =</span> guerrero)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 2
-  Origin lambda_guerrero
-  &lt;chr&gt;            &lt;dbl&gt;
-1 Japan           0.254 
-2 NZ              0.332 
-3 UK             -0.0511
-4 US              0.190 </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">frequency =</span> <span class="dv">12</span>, <span class="at">start =</span> <span class="dv">2000</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(i, </span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">detrend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pgram"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/spectre-irregulier-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>aus_arrivals <span class="sc">%&gt;%</span> </span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">features</span>(<span class="at">features =</span> guerrero) <span class="sc">%&gt;%</span> </span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(lambda_guerrero)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.25392556  0.33202070 -0.05108145  0.19043694</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spectrum</span>(i, </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"ar"</span>, <span class="at">log =</span> <span class="st">"no"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2_Graphiques_files/figure-html/spectre-irregulier-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Question supplémentaire : à quoi correspond la droite du graphique précédent ?</p>
+<p>Cela correspond à <span class="math inline">\(\mathbb V[i]/frequence \simeq\)</span> 0,067.</p>
+</div>
 </div>
 </div>
 

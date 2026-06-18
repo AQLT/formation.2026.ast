@@ -112,13 +112,13 @@ La saisonnalité est différente entre chaque pays :
 arrivées plus élevées aux T1 et T4 pour le Royaume-Uni.
 elles sont plus faibles au T1 pour la Nouvelle-Zélande et au plus haut au T3.
 Pour le Japon : plus faibles aux T2 et T4 sur années récentes.
-Pour les États-Unis le graphique n'est pas facile à lire
+Pour les États-Unis le graphique n'est pas facile à lire.
 
 ```{r aus-arrivals-subseries}
 aus_arrivals %>% gg_subseries(Arrivals)
 ```
 
-Pour le Royaume-Uni la hausse des entrées est surtout saisonnière (forte hausse aux T1 et T3).
+Pour le Royaume-Uni la hausse des entrées est surtout saisonnière (forte hausse aux T1 et T4).
 Depuis les États-Unis et la Nouvelle-Zélande la hausse semble la même sur tous les trimestres.
 
 Plusieurs points atypiques s'observent, par exemple :

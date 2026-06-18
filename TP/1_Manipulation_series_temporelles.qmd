@@ -512,7 +512,7 @@ Pour extraire les données à partir d'un certain mois (mars 2018 par exemple) o
 
 ```{r}
 ipi_tsibble %>% 
-	filter(index >= make_yearmonth(2000,6))
+	filter(index >= make_yearmonth(2018, 6))
 ```
 
 ::: {.callout-note}

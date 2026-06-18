@@ -1,5 +1,8 @@
 ---
 title: "0 - Accueil des stagiaires"
+# format: 
+#   beamer:
+#     toc: false
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +15,7 @@ Un tour de table pour faire connaissance :
 Prénom, Nom  
 Service ou établissement d'origine  
 Fonction occupée   
-Expérience sur les CVS-CJO (méthodes, outils utilisés)  
+Expérience sur {{< fa brands r-project >}} et sur les séries temporelles
 
 Pourquoi suivez-vous cette formation ?\
 Qu'attendez vous de cette formation ?\
@@ -21,21 +24,45 @@ Qu'attendez vous de cette formation ?\
 
 ### Objectifs de la formation
 
-Ensemble des documents disponibles sous : https://aqlt.github.io/{{< var repo-github >}}
+Ensemble des documents disponibles sous : https://aqlt.github.io/formation/{{< var repo-github>}}
 
-- connaître les concepts de base et le principe de la méthode X13-ARIMA
+- Utilisation de {{< fa brands r-project >}} et RStudio
 
-- savoir utiliser R et JDemetra+ pour désaisonnaliser des séries
+- Manipulation des séries temporelles sous {{< fa brands r-project >}} : `ts` et `tsibble` principalement ;  `xts`, `zoo` pour quelques manipulations
 
-- connaître les méthodes de correction des effets de calendrier
+- Analyses graphiques d'une série temporelle : chronogramme, lag plot (diagramme retardé),
+autocorrélogrammes, saisonnalité, analyse spectrale
 
-- savoir manipuler les fonctions de base de JDemetra+ et lire les principaux diagnostics
+- Décomposition d'une série temporelle
 
-- savoir modifier les spécifications et interpréter les diagnostics détaillés pour améliorer et valider les modèles
+- Prévision sans régresseur externe avec :
 
-- connaître les 3 étapes du processus de la production des CVS-CJO
+	- Le lissage exponentiel
 
+	- La stationnarité et la modélisation ARIMA
 
 . . .
 
-À approfondir : modèles espace-état, désaisonnalisation haute fréquence, benchmarking et désagrégation temporelle
+À approfondir : modèles de régression et de prévision, désaisonnalisation et correction des jours ouvrables, analyse de données à haute fréquence, modèles espace-état, DFM, combinaison de prévisions...
+
+### Pour en savoir plus
+
+Sur les prévisions : 
+
+Quartier-la-Tente A. (2024), *Utilisation de modèles de régression à coefficients variant dans le temps pour la prévision conjoncturelle*, Document de travail Insee, G2024/16. <https://github.com/InseeFrLab/DT-tvcoef>.
+
+Petropoulos F. and al (2021), *Forecasting: theory and practice*. <https://arxiv.org/abs/2012.03854>.
+
+### Bibliographie
+
+Aragon, Y. (2011), *Séries temporelles avec R. Méthodes et cas*, Springer.
+
+Brockwell, P. J. and Davis, R. A. (1991) *Time Series: Theory and Methods*. Second edition. Springer.
+
+Avec `ts()` :
+
+Hyndman, R.J., & Athanasopoulos, G. (2018) *Forecasting: principles and practice*, 2nd edition, OTexts: Melbourne, Australia. OTexts.com/fpp2. Accessed on june 2025.
+
+Sur `tsibble` :
+
+Hyndman, R.J., & Athanasopoulos, G. (2021) *Forecasting: principles and practice*, 3rd edition, OTexts: Melbourne, Australia. OTexts.com/fpp3. Accessed on june 2025.

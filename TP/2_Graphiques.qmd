@@ -31,9 +31,7 @@ library(fpp2)
 library(fpp3)
 ```
 
-# Manipulation graphique
-
-## Analyse graphique temporelle
+# Analyse graphique temporelle
 
 Le but des prochains exercices est de mettre en pratique les différentes fonctions pour tracer les graphiques vues en cours.
 
@@ -169,122 +167,6 @@ ggAcf(hsales, 12*7)
 En augmentant le nombre de lag on repère plus facilement les cycles longs (environ 8 ans).
 :::
 
-## Densité spectrale
-
-Le but de ces exercices est de calculer les densités spectrales des différentes composantes :
-
--   tendance  
--   cycle  
--   saisonnalité  
--   irrégulier
-
-Attention : par défaut la fonction `spectrum` enlève une tendance linéaire à la série !
-Voir l'aide associée à la fonction `?spectrum`.
-
-::: callout-note
-## Exercice
-Calculer le périodogramme et le spectre autorégressif d'une tendance.
-:::
-
-::: {.callout-caution collapse="true"}
-## Indice
-Il faut utiliser les paramètres `spectrum(., detrend = FALSE, log = "no")`.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{r spectre-tendance}
-t = ts(1:100, frequency = 12, start = 2000)
-spectrum(t, 
-		 detrend = FALSE,
-		 method = "pgram", log = "no")
-spectrum(t, 
-		 method = "ar", log = "no")
-```
-
-:::
-
-::: callout-note
-## Exercice
-Calculer le périodogramme et le spectre autorégressif d'une série mensuelle saisonnière.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{r spectre-saisonnalite}
-s = ts(0, frequency = 12, start = 2000, end = 2020)
-s[cycle(s) == 2] <- 1
-spectrum(s, 
-		 detrend = FALSE,
-		 method = "pgram", log = "no")
-spectrum(s, 
-		 method = "ar", log = "no")
-```
-
-:::
-
-::: callout-note
-## Exercice
-Calculer le périodogramme et le spectre autorégressif d'une cycle de 36 mois.
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{r spectre-cycle}
-c = ts(cos(2*pi/36*(1:100)) + sin(2*pi/36*(1:100)), frequency = 12, start = 2000)
-spectrum(c, 
-		 detrend = FALSE,
-		 method = "pgram", log = "no")
-spectrum(c, 
-		 method = "ar", log = "no")
-```
-
-:::
-
-::: callout-note
-## Exercice
-Pourquoi a-t-on un spectre différent en simulant un cycle de cette façon ?
-
-```{r spectre-cycle-saison}
-c = ts(0, frequency = 12, start = 2000, end = 2020)
-c[cycle(c) == 12][c(TRUE, FALSE, FALSE)] <- 1
-c
-spectrum(c, 
-		 method = "pgram", log = "no")
-```
-
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-Car la série construire reste saisonnière (même valeurs dans les mois autres que décembre) !
-:::
-
-::: callout-note
-## Exercice
-Calculer le périodogramme d'un bruit blanc (utiliser `rnorm()`).
-:::
-
-::: {.callout-tip collapse="true"}
-## Solution
-
-```{r spectre-irregulier}
-set.seed(1)
-i = ts(rnorm(100), frequency = 12, start = 2000)
-spectrum(i, 
-		 detrend = FALSE,
-		 method = "pgram", log = "no")
-spectrum(i, 
-		 method = "ar", log = "no")
-```
-
-Question supplémentaire : à quoi correspond la droite du graphique précédent ?
-
-Cela correspond à $\mathbb V[i]/frequence \simeq$ `r formatC(var(i)/frequency(i), digits = 3, format = "f", decimal.mark = ",")`.
-:::
 
 # Transformation des séries
 
@@ -418,3 +300,120 @@ aus_arrivals %>%
 	features(features = guerrero) %>% 
 	pull(lambda_guerrero)
 ```
+
+# Densité spectrale
+
+Le but de ces exercices est de calculer les densités spectrales des différentes composantes :
+
+-   tendance  
+-   cycle  
+-   saisonnalité  
+-   irrégulier
+
+Attention : par défaut la fonction `spectrum` enlève une tendance linéaire à la série !
+Voir l'aide associée à la fonction `?spectrum`.
+
+::: callout-note
+## Exercice
+Calculer le périodogramme et le spectre autorégressif d'une tendance.
+:::
+
+::: {.callout-caution collapse="true"}
+## Indice
+Il faut utiliser les paramètres `spectrum(., detrend = FALSE, log = "no")`.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{r spectre-tendance}
+t = ts(1:100, frequency = 12, start = 2000)
+spectrum(t, 
+		 detrend = FALSE,
+		 method = "pgram", log = "no")
+spectrum(t, 
+		 method = "ar", log = "no")
+```
+
+:::
+
+::: callout-note
+## Exercice
+Calculer le périodogramme et le spectre autorégressif d'une série mensuelle saisonnière.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{r spectre-saisonnalite}
+s = ts(0, frequency = 12, start = 2000, end = 2020)
+s[cycle(s) == 2] <- 1
+spectrum(s, 
+		 detrend = FALSE,
+		 method = "pgram", log = "no")
+spectrum(s, 
+		 method = "ar", log = "no")
+```
+
+:::
+
+::: callout-note
+## Exercice
+Calculer le périodogramme et le spectre autorégressif d'une cycle de 36 mois.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{r spectre-cycle}
+c = ts(cos(2*pi/36*(1:100)) + sin(2*pi/36*(1:100)), frequency = 12, start = 2000)
+spectrum(c, 
+		 detrend = FALSE,
+		 method = "pgram", log = "no")
+spectrum(c, 
+		 method = "ar", log = "no")
+```
+
+:::
+
+::: callout-note
+## Exercice
+Pourquoi a-t-on un spectre différent en simulant un cycle de cette façon ?
+
+```{r spectre-cycle-saison}
+c = ts(0, frequency = 12, start = 2000, end = 2020)
+c[cycle(c) == 12][c(TRUE, FALSE, FALSE)] <- 1
+c
+spectrum(c, 
+		 method = "pgram", log = "no")
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+Car la série construire reste saisonnière (même valeurs dans les mois autres que décembre) !
+:::
+
+::: callout-note
+## Exercice
+Calculer le périodogramme d'un bruit blanc (utiliser `rnorm()`).
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{r spectre-irregulier}
+set.seed(1)
+i = ts(rnorm(100), frequency = 12, start = 2000)
+spectrum(i, 
+		 detrend = FALSE,
+		 method = "pgram", log = "no")
+spectrum(i, 
+		 method = "ar", log = "no")
+```
+
+Question supplémentaire : à quoi correspond la droite du graphique précédent ?
+
+Cela correspond à $\mathbb V[i]/frequence \simeq$ `r formatC(var(i)/frequency(i), digits = 3, format = "f", decimal.mark = ",")`.
+:::

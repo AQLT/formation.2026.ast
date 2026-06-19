@@ -262,13 +262,13 @@ Sous {{< fa brands r-project >}} :  `spec.pgram()` ou `spectrum(method = "pgram"
 
 Soit $x_1,\dots,x_n$ des observations d'une série temporelle. On suppose $x_1,\dots,x_n$ les valeurs d'une fonction en $1, \dots, n$ :
 $$
-x_t=\frac{1}{\sqrt{n}}\sum_{\pi<\omega_j\leq\pi}a_je^{it\omega_j},\quad\omega_j=\frac{2\pi j}{n}
+x_t=\frac{1}{\sqrt{n}}\sum_{j|-\pi<\omega_j\leq\pi}a_je^{it\omega_j},\quad\omega_j=\frac{2\pi j}{n}
 $$
 Rmq : c'est bien possible d'écrire sous cette forme car $e_j=n^{-1/2}(e^{i\omega_j},\dots,e^{in\omega_j})$ base orthonormée de $\mathbb C^n$
 
 Il vient :
 $$
-x=\sum_{j|\pi<\omega_j\leq\pi}a_je_j\quad\text{avec}\quad
+x=\sum_{j|-\pi<\omega_j\leq\pi}a_je_j\quad\text{avec}\quad
 a_j=\langle x, e_j \rangle=\frac{1}{\sqrt{n}}\sum_{t=1}^nx_te^{-it\omega_j}
 $$
 

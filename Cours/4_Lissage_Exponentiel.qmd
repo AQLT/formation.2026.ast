@@ -179,6 +179,7 @@ mod2
 ### Exemple 2 
 
 \footnotesize
+
 ```{r, fig.height=4.5}
 mod <- ses(aggregate(co2), h = 12) 
 autoplot(mod) +
@@ -254,6 +255,7 @@ mod2
 
 ### Exemple 2 
 
+\footnotesize
 ```{r, fig.height=4.5}
 mod <- holt(co2, h = 12) 
 mod_damped <- holt(co2, damped = TRUE, h = 12) 
@@ -328,7 +330,7 @@ mod <- hw(AirPassengers, h=12)
 mod2 <- ets(AirPassengers, model = "AAA") # autre option
 autoplot(AirPassengers) + autolayer(mod, PI = FALSE, series = "Holt-Winter") +
 	autolayer(fitted(mod), series = "Fitted") +
-	labs(y = "Nombre",
+	labs(y = "Nombre", y = NULL,
 		 title  = "Passagers aériens")
 ```
 
@@ -354,6 +356,21 @@ s_t&=s_{t-m}+\gamma\varepsilon_t/(l_{t-1}+b_{t-1})
 . . .
 
 L'erreur aussi peut être multiplicative !
+
+
+### Et maintenant ?
+
+\footnotesize
+
+```{r, fig.height=4.5}
+mod_add <- hw(AirPassengers, h=12) 
+mod_mult <- hw(AirPassengers, h=12, seasonal = "multiplicative") 
+autoplot(AirPassengers) + autolayer(mod_add, PI = FALSE, series = "Additif") +
+  autolayer(mod_mult, PI = FALSE, series = "Multiplicatif") +
+	autolayer(fitted(mod_add), series = "Additif (fitted)") +
+	autolayer(fitted(mod_mult), series = "Multiplicatif (fitted)") +
+	labs(title  = "Passagers aériens", x = NULL, y = NULL)
+```
 
 ### Taxonomie des modèles ETS
 

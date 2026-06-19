@@ -36,6 +36,7 @@ quarto::quarto_render('Cours/6_Complements.qmd')
 file.copy('_site/Cours/6_Complements.pdf', 'Cours/6_Complements.pdf', overwrite = TRUE)
 
 unlink("_site/Cours", recursive = TRUE)
+unlink("_freeze/Cours", recursive = TRUE)
 
 disable_render()
 
